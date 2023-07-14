@@ -1,4 +1,5 @@
 import device_bridge
+import temp_bridge
 import time
 import signal
 import logging
@@ -25,6 +26,7 @@ discharge cell at different currents to get discharge curve
 
 load = device_bridge.Load()
 supply = device_bridge.Supply()
+temp_sensor = temp_bridge.temp_sensor()
 
 def shutdown_handler(sig, frame):
     load.off()
@@ -82,7 +84,7 @@ def charge_cell(output_file, charge_current, V_target=4.2, mah_max=4200, shutoff
         quit()
     
     # prep csvfile with fields
-    fields = ['Time', 'Voltage', 'Current', 'Total mAh']
+    fields = ['Time', 'Voltage', 'Current', 'Total mAh', 'Temperature']
     with open(output_file, 'w') as csvfile:
         csvwriter = csv.writer(csvfile) 
         # writing the fields 
@@ -127,11 +129,14 @@ def charge_cell(output_file, charge_current, V_target=4.2, mah_max=4200, shutoff
         # update total mah
         total_mah += (I1 + I2) * 1000 * update_period / 3600
 
+        # get temp
+        temp = temp_sensor.read_temp()
+
         # write to csv
         with open(output_file, 'a') as csvfile:
             csvwriter = csv.writer(csvfile) 
             # write data 
-            data = [time.time()-t0, V, (I1+I2), total_mah]
+            data = [time.time()-t0, V, (I1+I2), total_mah, temp]
             csvwriter.writerow(data)
 
 
@@ -196,7 +201,7 @@ def discharge_cell(output_file, discharge_current, mah_max=4200, shutoff_V=3.00,
         quit()
     
     # prep csvfile with fields
-    fields = ['Time', 'Voltage', 'Current', 'Total mAh']
+    fields = ['Time', 'Voltage', 'Current', 'Total mAh', 'Temperature']
     with open(output_file, 'w') as csvfile:
         csvwriter = csv.writer(csvfile) 
         # writing the fields 
@@ -241,11 +246,14 @@ def discharge_cell(output_file, discharge_current, mah_max=4200, shutoff_V=3.00,
         # update total mah
         total_mah += I * 1000 * update_period / 3600
 
+        # get temp
+        temp = temp_sensor.read_temp()
+
         # write to csv
         with open(output_file, 'a') as csvfile:
             csvwriter = csv.writer(csvfile) 
             # write data 
-            data = [time.time()-t0, V, I, total_mah]
+            data = [time.time()-t0, V, I, total_mah, temp]
             csvwriter.writerow(data)
 
 
