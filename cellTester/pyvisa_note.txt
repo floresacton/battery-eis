@@ -1,0 +1,9 @@
+pyvisa library was changed to allow binding to specific network device
+
+/home/batterytester/.local/lib/python3.9/site-packages/pyvisa_py/protocols/rpc.py
+line 486
+force python to bind to specific socket
+
+/home/batterytester/.local/lib/python3.9/site-packages/pyvisa_py/tcpip.py
+line 1091
+same

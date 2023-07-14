@@ -8,12 +8,10 @@ import csv
 import os
 import sys
 
-
 logging.basicConfig(
     filename='info.log',
     format='%(lineno)d %(levelname)s %(asctime)s - %(message)s',
     level=logging.INFO)
-
 
 '''
 Need to measure IR as a function of:
@@ -64,7 +62,7 @@ def charge_cell(output_file, charge_current, V_target=4.2, mah_max=4200, shutoff
 
     if t_max is None:
         # must be charged at at least 1C
-        t_max = mah_max * 1.5 * 3600 / charge_current
+        t_max = mah_max/1000 * 1.5 * 3600 / charge_current
 
     logging.info(f"Beginning charge process.\ncharge_current = {str(charge_current)}\nV_target = {str(V_target)}, shutoff_I = {str(shutoff_I)}\nt_max = {str(t_max)}\nmah_max = {str(mah_max)}")
 
@@ -182,7 +180,7 @@ def discharge_cell(output_file, discharge_current, mah_max=4200, shutoff_V=3.00,
 
     if t_max is None:
         # must be discharged at at least 1C
-        t_max = mah_max * 1.5 * 3600 / discharge_current
+        t_max = mah_max/1000 * 1.5 * 3600 / discharge_current
 
     logging.info(f"Beginning discharge process.\ndischarge_current = {str(discharge_current)}\nshutoff_V = {str(shutoff_V)}\nt_max = {str(t_max)}\nmah_max = {str(mah_max)}")
 
