@@ -1,0 +1,111 @@
+58 INFO 2023-07-11 14:31:12,723 - Beginning charge process.
+59 INFO 2023-07-11 14:31:12,724 - shutoff_I = 0.01
+60 INFO 2023-07-11 14:31:12,724 - t_max = 3600
+61 INFO 2023-07-11 14:31:12,725 - mah_max = 4200
+30 ERROR 2023-07-11 14:31:19,549 - Equipment turned off due to signal 2.  Exiting.
+98 ERROR 2023-07-11 14:31:19,550 - Unable to measure supply current.  Attempting shutdown.
+104 INFO 2023-07-11 14:31:19,668 - Successfully shut down.
+58 INFO 2023-07-11 14:33:10,329 - Beginning charge process.
+shutoff_I = {str(shutoff_I)}
+t_max = {str(t_max)}
+mah_max = {str(mah_max)}
+30 ERROR 2023-07-11 14:33:13,260 - Equipment turned off due to signal 2.  Exiting.
+95 ERROR 2023-07-11 14:33:13,260 - Unable to measure supply current.  Attempting shutdown.
+101 INFO 2023-07-11 14:33:13,326 - Successfully shut down.
+58 INFO 2023-07-11 14:33:49,745 - Beginning charge process.
+shutoff_I = 0.01
+t_max = 3600
+mah_max = 4200
+30 ERROR 2023-07-11 14:33:51,404 - Equipment turned off due to signal 2.  Exiting.
+63 INFO 2023-07-11 16:40:57,079 - Beginning charge process.
+V_target = 4.2, shutoff_I = 0.01
+t_max = 900.0
+mah_max = 4200
+31 ERROR 2023-07-11 16:41:13,780 - Equipment turned off due to signal 2.  Exiting.
+93 ERROR 2023-07-11 16:41:13,781 - Unable to measure supply current.  Attempting shutdown.
+99 INFO 2023-07-11 16:41:13,900 - Successfully shut down.
+64 INFO 2023-07-11 16:41:45,586 - Beginning charge process.
+V_target = 4.2, shutoff_I = 0.01
+t_max = 900.0
+mah_max = 4200
+31 ERROR 2023-07-11 16:41:46,718 - Equipment turned off due to signal 2.  Exiting.
+64 INFO 2023-07-11 16:42:03,878 - Beginning charge process.
+V_target = 4.2, shutoff_I = 0.01
+t_max = 900.0
+mah_max = 4200
+31 ERROR 2023-07-11 16:42:08,651 - 
+Equipment turned off due to signal 2.  Exiting.
+94 ERROR 2023-07-11 16:42:08,652 - Unable to measure supply current.  Attempting shutdown.
+100 INFO 2023-07-11 16:42:08,718 - Successfully shut down.
+65 INFO 2023-07-11 16:54:12,893 - Beginning charge process.
+V_target = 4.2, shutoff_I = 0.01
+t_max = 900.0
+mah_max = 4200
+32 ERROR 2023-07-11 16:54:53,875 - 
+Equipment turned off due to signal 2.  Exiting.
+117 ERROR 2023-07-11 16:54:53,876 - Unable to measure cell voltage.  Attempting shutdown.
+123 INFO 2023-07-11 16:54:53,940 - Successfully shut down.
+65 INFO 2023-07-11 17:00:26,503 - Beginning charge process.
+V_target = 4.2, shutoff_I = 0.01
+t_max = 900.0
+mah_max = 4200
+32 ERROR 2023-07-11 17:00:43,324 - 
+Equipment turned off due to signal 2.  Exiting.
+105 ERROR 2023-07-11 17:00:43,325 - Unable to measure supply current.  Attempting shutdown.
+111 INFO 2023-07-11 17:00:43,444 - Successfully shut down.
+65 INFO 2023-07-11 17:02:37,933 - Beginning charge process.
+V_target = 4.2, shutoff_I = 0.01
+t_max = 900.0
+mah_max = 4200
+32 ERROR 2023-07-11 17:02:53,933 - 
+Equipment turned off due to signal 2.  Exiting.
+118 ERROR 2023-07-11 17:02:53,934 - Unable to measure cell voltage.  Attempting shutdown.
+124 INFO 2023-07-11 17:02:54,053 - Successfully shut down.
+65 INFO 2023-07-11 17:03:45,021 - Beginning charge process.
+V_target = 4.2, shutoff_I = 0.01
+t_max = 900.0
+mah_max = 4200
+152 INFO 2023-07-11 17:10:17,232 - Current levels reached the stopping point.  Stopping now.
+67 INFO 2023-07-12 12:54:12,235 - Beginning charge process.
+V_target = 4.2, shutoff_I = 0.01
+t_max = 900.0
+mah_max = 4200
+67 INFO 2023-07-12 12:57:57,799 - Beginning charge process.
+V_target = 4.2, shutoff_I = 0.01
+t_max = 900.0
+mah_max = 4200
+67 INFO 2023-07-12 12:58:29,730 - Beginning charge process.
+V_target = 4.2, shutoff_I = 0.01
+t_max = 900.0
+mah_max = 4200
+152 INFO 2023-07-12 12:58:31,892 - Current levels reached the stopping point.  Stopping now.
+67 INFO 2023-07-12 13:15:14,983 - Beginning charge process.
+V_target = 4.2, shutoff_I = 0.01
+t_max = 900.0
+mah_max = 4200
+152 INFO 2023-07-12 13:15:17,170 - Current levels reached the stopping point.  Stopping now.
+182 INFO 2023-07-12 13:30:57,284 - Beginning discharge process.
+discharge_current = 10
+shutoff_V = 3.0
+t_max = 540.0
+mah_max = 4200
+258 WARNING 2023-07-12 13:39:59,346 - Time Exceeded!  Total time: 540.0307915210724.  Stopping now.
+67 INFO 2023-07-12 13:39:59,353 - Beginning charge process.
+charge_current = 6
+V_target = 4.2, shutoff_I = 0.01
+t_max = 900.0
+mah_max = 4200
+34 ERROR 2023-07-12 13:41:04,752 - 
+Equipment turned off due to signal 2.  Exiting.
+67 INFO 2023-07-12 13:46:54,332 - Beginning charge process.
+charge_current = 6
+V_target = 4.2, shutoff_I = 0.01
+t_max = 3780000.0
+mah_max = 4200
+152 INFO 2023-07-12 15:36:44,467 - Current levels reached the stopping point.  Stopping now.
+182 INFO 2023-07-12 15:36:44,530 - Beginning discharge process.
+discharge_current = 10
+shutoff_V = 3.0
+t_max = 2268000.0
+mah_max = 4200
+266 INFO 2023-07-12 15:58:12,595 - Voltage levels reached the stopping point.  Stopping now.
