@@ -45,7 +45,7 @@ class Load:
             except:
                 retries -= 1
                 time.sleep(.5)
-        raise(f"Failed to connect to DC load at addr {dev_addr}")
+        raise(Exception(f"Failed to connect to DC load at addr {dev_addr}"))
 
     def meas_V(self):
         return float(self.load.query("MEAS:VOLT?"))
@@ -93,7 +93,7 @@ class Supply:
             except:
                 retries -= 1
                 time.sleep(.5)
-        raise(f"Failed to connect to power supply at addr {dev_addr}")
+        raise(Exception(f"Failed to connect to power supply at addr {dev_addr}"))
 
     def on(self):
         self.supply.write("OUTP CH1,ON")

@@ -144,3 +144,17 @@ t_max = 3780.0000000000005
 mah_max = 4200
 34 ERROR 2023-07-14 18:36:02,478 - 
 Equipment turned off due to signal 2.  Exiting.
+56 INFO 2023-07-17 12:49:07,386 - Beginning charge process.
+charge_current = 6
+V_target = 4.2, shutoff_I = 0.05
+t_max = 3780.0000000000005
+mah_max = 4200
+144 INFO 2023-07-17 12:49:09,540 - Current levels reached the stopping point.  Stopping now.
+174 INFO 2023-07-17 12:49:09,608 - Beginning discharge process.
+discharge_current = 10
+shutoff_V = 3.0
+t_max = 2268.0000000000005
+mah_max = 4200
+261 INFO 2023-07-17 12:49:11,700 - Voltage levels reached the stopping point.  Stopping now.
+29 ERROR 2023-07-17 14:49:07,998 - 
+Equipment turned off due to signal 2.  Exiting.

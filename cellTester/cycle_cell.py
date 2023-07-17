@@ -1,5 +1,4 @@
 import device_bridge
-import temp_bridge
 import time
 import signal
 import logging
@@ -22,10 +21,6 @@ SOC
 discharge cell at different currents to get discharge curve
 '''
 
-load = device_bridge.Load()
-supply = device_bridge.Supply()
-temp_sensor = temp_bridge.temp_sensor()
-
 def shutdown_handler(sig, frame):
     load.off()
     supply.off()
@@ -38,24 +33,18 @@ def shutdown_handler(sig, frame):
 signal.signal(signal.SIGABRT, shutdown_handler)
 signal.signal(signal.SIGINT, shutdown_handler)
 
-def print_meas_debug():
-    ## supply
-    V1, V2 = supply.meas_V()
-    I1, I2 = supply.meas_I()
-    V_set = supply.get_V_set()
-
-    print("SUPPLY")
-    print(f"CH1: V={V1}, I={I1}")
-    print(f"CH2: V={V2}, I={I2}")
-    print(f"CH1 voltage setpoint: {V_set}")
-
-    V = load.meas_V()
-    
-    print("LOAD")
-    print(f"V: {V}")
-
-    print()
-
+def get_temp():
+    input_file = "current.temperature"
+    f = open(input_file, 'r')
+    lines = f.readlines()
+    while len(lines) != 2:
+        time.sleep(.005)
+        lines = f.readlines()
+    sens_temp = float(lines[0][:-1])
+    sens_time = float(lines[1])
+    if time.time() - sens_time > 2: # if more than 2 seconds out of date
+        return None
+    return sens_temp
 
 def charge_cell(output_file, charge_current, V_target=4.2, mah_max=4200, shutoff_I=0.050, t_max=None):
     # charge cell until current is smaller than set value
@@ -128,7 +117,7 @@ def charge_cell(output_file, charge_current, V_target=4.2, mah_max=4200, shutoff
         total_mah += (I1 + I2) * 1000 * update_period / 3600
 
         # get temp
-        temp = temp_sensor.read_temp()
+        temp = get_temp()
 
         # write to csv
         with open(output_file, 'a') as csvfile:
@@ -245,7 +234,7 @@ def discharge_cell(output_file, discharge_current, mah_max=4200, shutoff_V=3.00,
         total_mah += I * 1000 * update_period / 3600
 
         # get temp
-        temp = temp_sensor.read_temp()
+        temp = get_temp()
 
         # write to csv
         with open(output_file, 'a') as csvfile:
@@ -328,5 +317,11 @@ def do_cycle():
 
     charge_cell(charge_file, 6)
     discharge_cell(discharge_file, 10)
+
+if get_temp() is None:
+    raise(Exception("Temperature sensor is not working.  Did you run temp_sens.py in the background?"))
+
+load = device_bridge.Load()
+supply = device_bridge.Supply()
 
 do_cycle()

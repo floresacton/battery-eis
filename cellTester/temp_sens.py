@@ -2,8 +2,11 @@ import os
 import glob
 import time
  
-class temp_sensor:
+# reading from temp sensor is slow, updates at what seems to be 1Hz
+# need to make reading temp happen separately from main program to avoid blocking for temp measurement
+# when implemented, have temp_bridge write to a file that can be read by main program
 
+class temp_sensor:
     def __init__(self):
         os.system('modprobe w1-gpio')
         os.system('modprobe w1-therm')
@@ -28,3 +31,16 @@ class temp_sensor:
             temp_string = lines[1][equals_pos+2:]
             temp_c = float(temp_string) / 1000.0
             return temp_c
+
+ts = temp_sensor()
+
+output_file = "current.temperature"
+print("running")
+while True:
+    t = ts.read_temp()
+
+    f = open(output_file, 'w')
+    f.write(str(t))
+    f.write('\n')
+    f.write(str(time.time()))
+    f.close()
