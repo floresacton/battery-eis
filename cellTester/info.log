@@ -158,3 +158,45 @@ mah_max = 4200
 261 INFO 2023-07-17 12:49:11,700 - Voltage levels reached the stopping point.  Stopping now.
 29 ERROR 2023-07-17 14:49:07,998 - 
 Equipment turned off due to signal 2.  Exiting.
+78 INFO 2023-07-18 17:23:33,846 - Beginning charge process.
+charge_current = 6
+V_target = 4.2, shutoff_I = 0.05
+t_max = 3780.0000000000005
+mah_max = 4200
+156 INFO 2023-07-18 17:23:36,020 - Current levels reached the stopping point.  Stopping now.
+44 INFO 2023-07-18 17:23:36,089 - Successfully shut down supply.
+178 INFO 2023-07-18 17:23:36,090 - Beginning discharge process.
+discharge_current = 10
+shutoff_V = 3.0
+t_max = 2268.0000000000005
+mah_max = 4200
+260 INFO 2023-07-18 17:23:38,173 - Voltage levels reached the stopping point.  Stopping now.
+33 INFO 2023-07-18 17:23:38,190 - Successfully shut down load.
+78 INFO 2023-07-18 17:23:47,358 - Beginning charge process.
+charge_current = 6
+V_target = 4.2, shutoff_I = 0.05
+t_max = 3780.0000000000005
+mah_max = 4200
+156 INFO 2023-07-18 17:23:49,509 - Current levels reached the stopping point.  Stopping now.
+44 INFO 2023-07-18 17:23:49,577 - Successfully shut down supply.
+178 INFO 2023-07-18 17:23:49,578 - Beginning discharge process.
+discharge_current = 10
+shutoff_V = 3.0
+t_max = 2268.0000000000005
+mah_max = 4200
+260 INFO 2023-07-18 17:23:51,662 - Voltage levels reached the stopping point.  Stopping now.
+33 INFO 2023-07-18 17:23:51,672 - Successfully shut down load.
+2023-07-18 17:26:18,312 INFO: Line 78 -->  Beginning charge process.
+charge_current = 6
+V_target = 4.2, shutoff_I = 0.05
+t_max = 3780.0000000000005
+mah_max = 4200
+2023-07-18 17:26:20,462 INFO: Line 156 -->  Current levels reached the stopping point.  Stopping now.
+2023-07-18 17:26:20,530 INFO: Line 44 -->  Successfully shut down supply.
+2023-07-18 17:26:20,531 INFO: Line 178 -->  Beginning discharge process.
+discharge_current = 10
+shutoff_V = 3.0
+t_max = 2268.0000000000005
+mah_max = 4200
+2023-07-18 17:26:22,610 INFO: Line 260 -->  Voltage levels reached the stopping point.  Stopping now.
+2023-07-18 17:26:22,620 INFO: Line 33 -->  Successfully shut down load.

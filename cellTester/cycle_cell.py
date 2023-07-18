@@ -9,7 +9,7 @@ import sys
 
 logging.basicConfig(
     filename='info.log',
-    format='%(lineno)d %(levelname)s %(asctime)s - %(message)s',
+    format='%(asctime)s %(levelname)s: Line %(lineno)d -->  %(message)s',
     level=logging.INFO)
 
 '''
@@ -21,9 +21,31 @@ SOC
 discharge cell at different currents to get discharge curve
 '''
 
+def shut_down_load(failmsg=None):
+    try: 
+        load.off()
+    except:
+        if failmsg is None:
+            logging.critical(f"Could not shut down load.")
+        else:
+            logging.critical(failmsg)
+    else:
+        logging.info(f"Successfully shut down load.")
+
+def shut_down_supply(failmsg=None):
+    try: 
+        supply.off()
+    except:
+        if failmsg is None:
+            logging.critical(f"Could not shut down supply.")
+        else:
+            logging.critical(failmsg)
+    else:
+        logging.info(f"Successfully shut down supply.")
+
 def shutdown_handler(sig, frame):
-    load.off()
-    supply.off()
+    shut_down_load()
+    shut_down_supply()
     # log error
     error_msg = f"\nEquipment turned off due to signal {sig}.  Exiting."
     logging.error(error_msg)
@@ -43,7 +65,7 @@ def get_temp():
     sens_temp = float(lines[0][:-1])
     sens_time = float(lines[1])
     if time.time() - sens_time > 2: # if more than 2 seconds out of date
-        return None
+        return -1
     return sens_temp
 
 def charge_cell(output_file, charge_current, V_target=4.2, mah_max=4200, shutoff_I=0.050, t_max=None):
@@ -92,12 +114,7 @@ def charge_cell(output_file, charge_current, V_target=4.2, mah_max=4200, shutoff
             I1, I2 = supply.meas_I()
         except:
             logging.error(f"Unable to measure supply current.  Attempting shutdown.")
-            try: 
-                supply.off()
-            except:
-                logging.critical(f"Could not shut down supply.")
-            else:
-                logging.info(f"Successfully shut down.")
+            shut_down_supply()
             quit()
         
         # measure cell voltage
@@ -105,12 +122,7 @@ def charge_cell(output_file, charge_current, V_target=4.2, mah_max=4200, shutoff
             V = load.meas_V()
         except:
             logging.error(f"Unable to measure cell voltage.  Attempting shutdown.")
-            try: 
-                supply.off()
-            except:
-                logging.critical(f"Could not shut down supply.")
-            else:
-                logging.info(f"Successfully shut down.")
+            shut_down_supply()
             quit()
 
         # update total mah
@@ -145,12 +157,7 @@ def charge_cell(output_file, charge_current, V_target=4.2, mah_max=4200, shutoff
                 break
         except:
             logging.error("Could not check end conditions.  Attempting shutdown.")
-            try: 
-                supply.off()
-            except:
-                logging.critical(f"Could not shut down supply.")
-            else:
-                logging.info(f"Successfully shut down.")
+            shut_down_supply()
             quit()
             
         # wait for update period to elapse
@@ -159,10 +166,7 @@ def charge_cell(output_file, charge_current, V_target=4.2, mah_max=4200, shutoff
         last_update_time = time.time()
 
     # disable supply
-    try:
-        supply.off()
-    except:
-        logging.critical(f"Could not shut down supply at conclusion of charge process.")
+    shut_down_supply(failmsg="Could not shut down supply at conclusion of charge process.")
 
 def discharge_cell(output_file, discharge_current, mah_max=4200, shutoff_V=3.00, t_max=None):
     # discharge cell until cell voltage is shutoff voltage
@@ -222,12 +226,7 @@ def discharge_cell(output_file, discharge_current, mah_max=4200, shutoff_V=3.00,
             V = load.meas_V()
         except:
             logging.error(f"Unable to measure cell voltage.  Attempting shutdown.")
-            try: 
-                load.off()
-            except:
-                logging.critical(f"Could not shut down load.")
-            else:
-                logging.info(f"Successfully shut down.")
+            shut_down_load()
             quit()
 
         # update total mah
@@ -262,12 +261,7 @@ def discharge_cell(output_file, discharge_current, mah_max=4200, shutoff_V=3.00,
                 break
         except:
             logging.error("Could not check end conditions.  Attempting shutdown.")
-            try: 
-                load.off()
-            except:
-                logging.critical(f"Could not shut down load.")
-            else:
-                logging.info(f"Successfully shut down.")
+            shut_down_load()
             quit()
             
         # wait for update period to elapse
@@ -276,11 +270,7 @@ def discharge_cell(output_file, discharge_current, mah_max=4200, shutoff_V=3.00,
         last_update_time = time.time()
 
     # disable load
-    try:
-        load.off()
-    except:
-        logging.critical(f"Could not shut down load at conclusion of discharge process.")
-
+    shut_down_load(failmsg="Could not shut down load at conclusion of discharge process.")
 
 def do_cycle():
 
