@@ -65,7 +65,7 @@ def get_temp():
     sens_temp = float(lines[0][:-1])
     sens_time = float(lines[1])
     if time.time() - sens_time > 2: # if more than 2 seconds out of date
-        return -1
+        return None
     return sens_temp
 
 def charge_cell(output_file, charge_current, V_target=4.2, mah_max=4200, shutoff_I=0.050, t_max=None):
