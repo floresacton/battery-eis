@@ -12,3 +12,47 @@ t_max = 2268.0000000000005
 mah_max = 4200
 2023-07-19 18:04:32,949 INFO: Line 260 -->  Voltage levels reached the stopping point.  Stopping now.
 2023-07-19 18:04:32,957 INFO: Line 33 -->  Successfully shut down load.
+2023-07-24 17:03:09,637 INFO: Line 33 -->  Successfully shut down load.
+2023-07-24 17:03:09,707 INFO: Line 44 -->  Successfully shut down supply.
+2023-07-24 17:03:09,707 ERROR: Line 51 -->  
+Equipment turned off due to signal 2.  Exiting.
+2023-07-24 17:03:40,234 INFO: Line 82 -->  Beginning charge process.
+charge_current = 6
+V_target = 4.2, shutoff_I = 0.05
+t_max = 3780.0000000000005
+mah_max = 4200
+2023-07-24 17:03:49,769 INFO: Line 33 -->  Successfully shut down load.
+2023-07-24 17:03:49,836 INFO: Line 44 -->  Successfully shut down supply.
+2023-07-24 17:03:49,836 ERROR: Line 51 -->  
+Equipment turned off due to signal 2.  Exiting.
+2023-07-24 17:05:28,129 INFO: Line 33 -->  Successfully shut down load.
+2023-07-24 17:05:28,140 INFO: Line 44 -->  Successfully shut down supply.
+2023-07-24 17:05:28,141 ERROR: Line 51 -->  
+Equipment turned off due to signal 2.  Exiting.
+2023-07-24 17:05:44,367 INFO: Line 199 -->  Beginning discharge process.
+discharge_current = 5
+shutoff_V = 3.0
+t_max = 4536.000000000001
+mah_max = 4200
+2023-07-24 17:06:04,514 INFO: Line 200 -->  Beginning discharge process.
+discharge_current = 5
+shutoff_V = 3.0
+t_max = 4536.000000000001
+mah_max = 4200
+2023-07-24 17:06:07,110 INFO: Line 279 -->  Beginning DCIR pulse with current 10
+2023-07-24 17:06:09,307 INFO: Line 324 -->  Voltage levels reached the stopping point.  Stopping now.
+2023-07-24 17:06:09,322 INFO: Line 34 -->  Successfully shut down load.
+2023-07-24 17:07:28,168 INFO: Line 83 -->  Beginning charge process.
+charge_current = 6
+V_target = 4.2, shutoff_I = 0.05
+t_max = 3780.0000000000005
+mah_max = 4200
+2023-07-24 17:23:59,342 INFO: Line 161 -->  Current levels reached the stopping point.  Stopping now.
+2023-07-24 17:23:59,354 INFO: Line 45 -->  Successfully shut down supply.
+2023-07-24 17:23:59,354 INFO: Line 200 -->  Beginning discharge process.
+discharge_current = 5
+shutoff_V = 3.0
+t_max = 4536.000000000001
+mah_max = 4200
+2023-07-24 17:24:01,440 INFO: Line 324 -->  Voltage levels reached the stopping point.  Stopping now.
+2023-07-24 17:24:01,457 INFO: Line 34 -->  Successfully shut down load.

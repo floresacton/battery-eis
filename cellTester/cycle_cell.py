@@ -6,6 +6,7 @@ import random
 import csv
 import os
 import sys
+import numpy as np
 
 logging.basicConfig(
     filename='info.log',
@@ -59,9 +60,13 @@ def get_temp():
     input_file = "current.temperature"
     f = open(input_file, 'r')
     lines = f.readlines()
+    count = 0
     while len(lines) != 2:
+        if count > 3: # cannot read file
+            return None
         time.sleep(.005)
         lines = f.readlines()
+        count += 1
     sens_temp = float(lines[0][:-1])
     sens_time = float(lines[1])
     if time.time() - sens_time > 2: # if more than 2 seconds out of date
@@ -168,17 +173,47 @@ def charge_cell(output_file, charge_current, V_target=4.2, mah_max=4200, shutoff
     # disable supply
     shut_down_supply(failmsg="Could not shut down supply at conclusion of charge process.")
 
-def discharge_cell(output_file, discharge_current, mah_max=4200, shutoff_V=3.00, t_max=None):
+
+#####
+"""
+Need to do DCIR pulses to measure IR as a function of discharge current and SOC
+For a given discharge, choose a DCIR pulse current beforehand
+Choose fixed points between 0% and 100% SOC to do a DCIR pulse
+Requires counting coulombs to know when during discharge a pulse needs to occur
+Take list of points, each point existing between 0 and 1 in sorted order to represent when to pulse
+Inside while loop check to see if it is time to pulse and transition to "pulsing" state
+While in pulsing state, data acquisition frequency increases and timer begins
+When predefined pulse time has run out, return to regular discharge state
+Continue to check if end conditions are met to terminate early, even while pulsing
+"""
+#####
+
+def discharge_cell(output_file, discharge_current, mah_max=4200, shutoff_V=3.00, t_max=None, pulse_current=None):
     # discharge cell until cell voltage is shutoff voltage
 
+    # init t_max to default value if not done so
     if t_max is None:
         # must be discharged at at least 1C
         t_max = mah_max/1000 * 1.5 * 3600 / discharge_current
 
+    # log discharge info
     logging.info(f"Beginning discharge process.\ndischarge_current = {str(discharge_current)}\nshutoff_V = {str(shutoff_V)}\nt_max = {str(t_max)}\nmah_max = {str(mah_max)}")
 
-    update_period = 500 / 1000
-    # track mah
+    # define update frequency
+    update_period = 1 / 2 # Hz
+
+    # define update frequency during a DCIR pulse
+    pulse_update_period = 1 / 5 # Hz
+
+    # define pulse time during DCIR pulse
+    pulse_time = 5 # seconds
+
+    # define points where DCIR pulse should occur
+    n = 10 # of pulses
+    pulse_points = np.linspace(0, 1-(1/n), n)
+    pulse_idx = 0 # index of which pulse should occur next
+    
+    # track mAh
     total_mah = 0
 
     try:
@@ -206,6 +241,12 @@ def discharge_cell(output_file, discharge_current, mah_max=4200, shutoff_V=3.00,
     # used for timing updates
     last_update_time = t0
 
+    # init pulse timer
+    pulse_timer = t0
+
+    # init to default state
+    pulsing = False
+
     while(True):
 
         # measure load current
@@ -229,8 +270,32 @@ def discharge_cell(output_file, discharge_current, mah_max=4200, shutoff_V=3.00,
             shut_down_load()
             quit()
 
+        if pulse_current is not None:
+            # calculate SOC
+            SOC = total_mah / mah_max
+            
+            # check to see if state change is required
+            if SOC > pulse_points[pulse_idx]:
+                logging.info(f"Beginning DCIR pulse with current {pulse_current}")
+                pulsing = True
+                pulse_idx += 1
+                pulse_timer = time.time()
+
+                # change current drawn
+                load.set_I(pulse_current)
+
+            elif time.time() > pulse_timer + pulse_time:
+                logging.info(f"Returning to normal discharge with current {discharge_current}")
+                pulsing = False
+
+                # reset discharge current
+                load.set_I(discharge_current)
+
+        # define period depeding on pulse state
+        period = pulse_update_period if pulsing else update_period
+
         # update total mah
-        total_mah += I * 1000 * update_period / 3600
+        total_mah += I * 1000 * period / 3600
 
         # get temp
         temp = get_temp()
@@ -241,7 +306,6 @@ def discharge_cell(output_file, discharge_current, mah_max=4200, shutoff_V=3.00,
             # write data 
             data = [time.time()-t0, V, I, total_mah, temp]
             csvwriter.writerow(data)
-
 
         ## check for end conditions ##
         # time > t_max
@@ -265,7 +329,8 @@ def discharge_cell(output_file, discharge_current, mah_max=4200, shutoff_V=3.00,
             quit()
             
         # wait for update period to elapse
-        while(time.time() - last_update_time < update_period):
+        # changes based on pulse state
+        while(time.time() - last_update_time < period):
             continue
         last_update_time = time.time()
 
@@ -306,7 +371,7 @@ def do_cycle():
     discharge_file = path + f"{timestr}_discharge.csv"
 
     charge_cell(charge_file, 6)
-    discharge_cell(discharge_file, 10)
+    discharge_cell(discharge_file, 5, pulse_current=10)
 
 if get_temp() is None:
     raise(Exception("Temperature sensor is not working.  Did you run temp_sens.py in the background?"))
