@@ -159,11 +159,11 @@ def charge_cell(data_path, charge_current, V_target=4.2, mah_max=4200, shutoff_I
         # I < I_shutoff
         try:
             if time.time() - t0 > t_max:
-                logging.warn(f"Time Exceeded!  Total time: {time.time() - t0}.  Stopping now.")
+                logging.warning(f"Time Exceeded!  Total time: {time.time() - t0}.  Stopping now.")
                 break
 
             if total_mah > mah_max:
-                logging.warn(f"Total mah Exceeded! Total mah: {total_mah}.  Stopping now.")
+                logging.warning(f"Total mah Exceeded! Total mah: {total_mah}.  Stopping now.")
                 break
 
             if (I1+I2) < shutoff_I:
@@ -325,11 +325,11 @@ def discharge_cell(data_path, discharge_current, mah_max=4200, shutoff_V=3.00, t
         # V < shutoff_V
         try:
             if time.time() - t0 > t_max:
-                logging.warn(f"Time Exceeded!  Total time: {time.time() - t0}.  Stopping now.")
+                logging.warning(f"Time Exceeded!  Total time: {time.time() - t0}.  Stopping now.")
                 break
 
             if total_mah > mah_max:
-                logging.warn(f"Total mah Exceeded! Total mah: {total_mah}.  Stopping now.")
+                logging.warning(f"Total mah Exceeded! Total mah: {total_mah}.  Stopping now.")
                 break
 
             if V < shutoff_V:
