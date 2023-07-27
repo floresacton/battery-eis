@@ -5315,3 +5315,5 @@ charge_current = 6
 V_target = 4.2, shutoff_I = 0.05
 t_max = 3780.0000000000005
 mah_max = 4200
+2023-07-27 17:55:49,222 WARNING: Line 162 -->  Time Exceeded!  Total time: 3780.066121339798.  Stopping now.
+2023-07-27 17:55:49,235 INFO: Line 45 -->  Successfully shut down supply.

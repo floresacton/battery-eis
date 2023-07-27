@@ -379,7 +379,7 @@ def do_cycle():
     # cycle with intermittent pulsing
     # pulse at 2x discharge current
     currents = [1*Ah, 2*Ah, 3*Ah, 15]
-    for C in currents:
+    for current in currents:
         # wait 1 min for cell to recover
         time.sleep(60)
 
@@ -390,7 +390,7 @@ def do_cycle():
         time.sleep(60)
 
         print(f"Discharging at {C}A")
-        discharge_cell(data_path, c, pulse_current=current*2)
+        discharge_cell(data_path, current, pulse_current=current*2)
 
 if get_temp() is None:
     raise(Exception("Temperature sensor is not working.  Did you run temp_sens.py in the background?"))
