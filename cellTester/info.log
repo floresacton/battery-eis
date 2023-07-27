@@ -5296,3 +5296,17 @@ mah_max = 4200
 2023-07-25 14:51:22,406 INFO: Line 288 -->  Returning to normal discharge with current 5
 2023-07-25 14:51:22,415 INFO: Line 324 -->  Voltage levels reached the stopping point.  Stopping now.
 2023-07-25 14:51:22,425 INFO: Line 34 -->  Successfully shut down load.
+2023-07-27 14:54:49,481 INFO: Line 89 -->  Beginning charge process.
+charge_current = 6
+V_target = 4.2, shutoff_I = 0.05
+t_max = 3780.0000000000005
+mah_max = 4200
+2023-07-27 15:57:51,641 WARNING: Line 162 -->  Time Exceeded!  Total time: 3780.0465610027313.  Stopping now.
+2023-07-27 15:57:51,707 INFO: Line 45 -->  Successfully shut down supply.
+2023-07-27 15:57:51,708 INFO: Line 209 -->  Beginning discharge process.
+discharge_current = 4.2
+shutoff_V = 3.0
+t_max = 5400.000000000001
+mah_max = 4200
+2023-07-27 16:51:46,974 INFO: Line 336 -->  Voltage levels reached the stopping point.  Stopping now.
+2023-07-27 16:51:46,983 INFO: Line 34 -->  Successfully shut down load.

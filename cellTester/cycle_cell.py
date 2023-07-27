@@ -73,12 +73,18 @@ def get_temp():
         return None
     return sens_temp
 
-def charge_cell(output_file, charge_current, V_target=4.2, mah_max=4200, shutoff_I=0.050, t_max=None):
+def get_filename(path, name):
+    timestr = time.strftime("%Y_%m_%d-%H_%M_%S")
+    file_name = path + f"{timestr}_{name}.csv"
+    return file_name
+
+def charge_cell(data_path, charge_current, V_target=4.2, mah_max=4200, shutoff_I=0.050, t_max=None):
+
     # charge cell until current is smaller than set value
 
     if t_max is None:
         # must be charged at at least 1C
-        t_max = mah_max/1000 * 1.5 * 3600 / charge_current
+        t_max = mah_max/1000 * 3 * 3600 / charge_current
 
     logging.info(f"Beginning charge process.\ncharge_current = {str(charge_current)}\nV_target = {str(V_target)}, shutoff_I = {str(shutoff_I)}\nt_max = {str(t_max)}\nmah_max = {str(mah_max)}")
 
@@ -97,6 +103,9 @@ def charge_cell(output_file, charge_current, V_target=4.2, mah_max=4200, shutoff
         logging.error("Could not initialize supply.  Stopping.")
         quit()
     
+    # get filename
+    output_file = get_filename(data_path, f"charge_{charge_current}A")
+
     # prep csvfile with fields
     fields = ['Time', 'Voltage', 'Current', 'Total mAh', 'Temperature']
     with open(output_file, 'w') as csvfile:
@@ -188,7 +197,7 @@ Continue to check if end conditions are met to terminate early, even while pulsi
 """
 #####
 
-def discharge_cell(output_file, discharge_current, mah_max=4200, shutoff_V=3.00, t_max=None, pulse_current=None):
+def discharge_cell(data_path, discharge_current, mah_max=4200, shutoff_V=3.00, t_max=None, pulse_current=None):
     # discharge cell until cell voltage is shutoff voltage
 
     # init t_max to default value if not done so
@@ -226,6 +235,9 @@ def discharge_cell(output_file, discharge_current, mah_max=4200, shutoff_V=3.00,
         logging.error("Could not initialize load.  Stopping.")
         quit()
     
+    # get filename
+    output_file = get_filename(data_path, f"discharge_{discharge_current}A" + "" if pulse_current==None else "_pulse_{pulse_current}A")
+
     # prep csvfile with fields
     fields = ['Time', 'Voltage', 'Current', 'Total mAh', 'Temperature']
     with open(output_file, 'w') as csvfile:
@@ -338,16 +350,7 @@ def discharge_cell(output_file, discharge_current, mah_max=4200, shutoff_V=3.00,
     shut_down_load(failmsg="Could not shut down load at conclusion of discharge process.")
 
 def do_cycle():
-
-    '''
-    # get number of cycles
-    # get cycle parameters
-    cycle_count = sys.argv[2]
-    charge_current = sys.argv[3]
-    discharge_current = sys.argv[4]
-    '''
-
-    filenames= os.listdir("./celldata")
+    filenames = os.listdir("./celldata")
     directories= []
     for filename in filenames: # loop through all the files and folders
         if os.path.isdir(os.path.join(os.path.abspath("./celldata"), filename)): # check whether the current object is a folder or not
@@ -363,15 +366,31 @@ def do_cycle():
             print("Invalid input, try again")
             continue
         break
-        
-    path = f"celldata/{directories[cell_idx-1]}/"
-    timestr = time.strftime("%Y_%m_%d-%H_%M_%S")
+    
+    # define path to write data
+    data_path = f"celldata/{directories[cell_idx-1]}/"
 
-    charge_file = path + f"{timestr}_charge.csv"
-    discharge_file = path + f"{timestr}_discharge.csv"
+    Ah = 4.2
 
-    charge_cell(charge_file, 6)
-    discharge_cell(discharge_file, 5, pulse_current=10)
+    # do cycle without pulses
+    charge_cell(data_path, 6)
+    discharge_cell(data_path, 1 * Ah, pulse_current=None)
+
+    # cycle with intermittent pulsing
+    # pulse at 2x discharge current
+    currents = [1*Ah, 2*Ah, 3*Ah, 15]
+    for C in currents:
+        # wait 1 min for cell to recover
+        time.sleep(60)
+
+        print(f"Preparing for {C}A discharge")
+        charge_cell(data_path, 6)
+
+        # wait 1 min for cell to settle
+        time.sleep(60)
+
+        print(f"Discharging at {C}A")
+        discharge_cell(data_path, c, pulse_current=current*2)
 
 if get_temp() is None:
     raise(Exception("Temperature sensor is not working.  Did you run temp_sens.py in the background?"))
