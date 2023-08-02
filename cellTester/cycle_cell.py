@@ -78,7 +78,7 @@ def get_filename(path, name):
     file_name = path + f"{timestr}_{name}.csv"
     return file_name
 
-def charge_cell(data_path, charge_current, V_target=4.2, mah_max=4200, shutoff_I=0.050, t_max=None):
+def charge_cell(data_path, charge_current, V_target=4.2, mah_max=5000, shutoff_I=0.100, t_max=None):
 
     # charge cell until current is smaller than set value
 
@@ -197,7 +197,7 @@ Continue to check if end conditions are met to terminate early, even while pulsi
 """
 #####
 
-def discharge_cell(data_path, discharge_current, mah_max=4200, shutoff_V=3.00, t_max=None, pulse_current=None):
+def discharge_cell(data_path, discharge_current, mah_max=4200, shutoff_V=2.5, t_max=None, pulse_current=None):
     # discharge cell until cell voltage is shutoff voltage
 
     # init t_max to default value if not done so
@@ -215,7 +215,7 @@ def discharge_cell(data_path, discharge_current, mah_max=4200, shutoff_V=3.00, t
     pulse_update_period = 1 / 5 # Hz
 
     # define pulse time during DCIR pulse
-    pulse_time = 5 # seconds
+    pulse_time = 10 # seconds
 
     # define points where DCIR pulse should occur
     n = 10 # of pulses
@@ -375,26 +375,22 @@ def do_cycle():
     # define path to write data
     data_path = f"celldata/{directories[cell_idx-1]}/"
 
-    Ah = 4.2
-
-    # do cycle without pulses
+    # do cycle at 1 Amp
     charge_cell(data_path, 6)
-    discharge_cell(data_path, 1 * Ah, pulse_current=None)
+    discharge_cell(data_path, 1, pulse_current=None)
 
     # cycle with intermittent pulsing
     # pulse at 2x discharge current
-    currents = [1*Ah, 2*Ah, 3*Ah, 15]
+    currents = [1, 5, 10, 15]
     for current in currents:
         # wait 1 min for cell to recover
         time.sleep(60)
 
-        print(f"Preparing for {current}A discharge")
         charge_cell(data_path, 6)
 
         # wait 1 min for cell to settle
         time.sleep(60)
 
-        print(f"Discharging at {current}A")
         discharge_cell(data_path, current, pulse_current=current*2)
 
 if get_temp() is None:
