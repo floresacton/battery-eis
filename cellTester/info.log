@@ -5317,3 +5317,151 @@ t_max = 3780.0000000000005
 mah_max = 4200
 2023-07-27 17:55:49,222 WARNING: Line 162 -->  Time Exceeded!  Total time: 3780.066121339798.  Stopping now.
 2023-07-27 17:55:49,235 INFO: Line 45 -->  Successfully shut down supply.
+2023-08-01 11:28:52,197 INFO: Line 89 -->  Beginning charge process.
+charge_current = 6
+V_target = 4.2, shutoff_I = 0.05
+t_max = 7560.000000000001
+mah_max = 4200
+2023-08-01 12:50:26,060 INFO: Line 170 -->  Current levels reached the stopping point.  Stopping now.
+2023-08-01 12:50:26,126 INFO: Line 45 -->  Successfully shut down supply.
+2023-08-01 12:50:26,127 INFO: Line 209 -->  Beginning discharge process.
+discharge_current = 4.2
+shutoff_V = 3.0
+t_max = 5400.000000000001
+mah_max = 4200
+2023-08-01 13:44:35,474 INFO: Line 336 -->  Voltage levels reached the stopping point.  Stopping now.
+2023-08-01 13:44:35,481 INFO: Line 34 -->  Successfully shut down load.
+2023-08-01 13:49:14,051 INFO: Line 89 -->  Beginning charge process.
+charge_current = 6
+V_target = 4.2, shutoff_I = 0.05
+t_max = 7560.000000000001
+mah_max = 4200
+2023-08-01 15:24:35,519 INFO: Line 170 -->  Current levels reached the stopping point.  Stopping now.
+2023-08-01 15:24:35,584 INFO: Line 45 -->  Successfully shut down supply.
+2023-08-01 15:25:35,641 INFO: Line 209 -->  Beginning discharge process.
+discharge_current = 4.2
+shutoff_V = 3.0
+t_max = 5400.000000000001
+mah_max = 4200
+2023-08-01 15:25:38,201 INFO: Line 291 -->  Beginning DCIR pulse with current 8.4
+2023-08-01 15:25:43,401 INFO: Line 300 -->  Returning to normal discharge with current 4.2
+2023-08-01 15:31:32,421 INFO: Line 291 -->  Beginning DCIR pulse with current 8.4
+2023-08-01 15:31:37,630 INFO: Line 300 -->  Returning to normal discharge with current 4.2
+2023-08-01 15:37:27,101 INFO: Line 291 -->  Beginning DCIR pulse with current 8.4
+2023-08-01 15:37:32,312 INFO: Line 300 -->  Returning to normal discharge with current 4.2
+2023-08-01 15:43:21,827 INFO: Line 291 -->  Beginning DCIR pulse with current 8.4
+2023-08-01 15:43:27,021 INFO: Line 300 -->  Returning to normal discharge with current 4.2
+2023-08-01 15:49:16,510 INFO: Line 291 -->  Beginning DCIR pulse with current 8.4
+2023-08-01 15:49:21,731 INFO: Line 300 -->  Returning to normal discharge with current 4.2
+2023-08-01 15:55:10,707 INFO: Line 291 -->  Beginning DCIR pulse with current 8.4
+2023-08-01 15:55:15,710 INFO: Line 300 -->  Returning to normal discharge with current 4.2
+2023-08-01 16:01:05,737 INFO: Line 291 -->  Beginning DCIR pulse with current 8.4
+2023-08-01 16:01:10,933 INFO: Line 300 -->  Returning to normal discharge with current 4.2
+2023-08-01 16:07:00,414 INFO: Line 291 -->  Beginning DCIR pulse with current 8.4
+2023-08-01 16:07:05,614 INFO: Line 300 -->  Returning to normal discharge with current 4.2
+2023-08-01 16:12:54,615 INFO: Line 291 -->  Beginning DCIR pulse with current 8.4
+2023-08-01 16:12:59,841 INFO: Line 300 -->  Returning to normal discharge with current 4.2
+2023-08-01 16:18:49,325 INFO: Line 291 -->  Beginning DCIR pulse with current 8.4
+2023-08-01 16:18:49,550 INFO: Line 336 -->  Voltage levels reached the stopping point.  Stopping now.
+2023-08-01 16:18:49,571 INFO: Line 34 -->  Successfully shut down load.
+2023-08-01 16:19:49,631 INFO: Line 89 -->  Beginning charge process.
+charge_current = 6
+V_target = 4.2, shutoff_I = 0.05
+t_max = 7560.000000000001
+mah_max = 4200
+2023-08-01 17:08:44,238 INFO: Line 34 -->  Successfully shut down load.
+2023-08-01 17:08:44,303 INFO: Line 45 -->  Successfully shut down supply.
+2023-08-01 17:08:44,304 ERROR: Line 52 -->  
+Equipment turned off due to signal 2.  Exiting.
+2023-08-02 11:04:02,314 INFO: Line 89 -->  Beginning charge process.
+charge_current = 6
+V_target = 4.2, shutoff_I = 0.05
+t_max = 7560.000000000001
+mah_max = 4200
+2023-08-02 11:44:52,523 INFO: Line 170 -->  Current levels reached the stopping point.  Stopping now.
+2023-08-02 11:44:52,534 INFO: Line 45 -->  Successfully shut down supply.
+2023-08-02 11:45:52,595 INFO: Line 209 -->  Beginning discharge process.
+discharge_current = 8.4
+shutoff_V = 3.0
+t_max = 2700.0000000000005
+mah_max = 4200
+2023-08-02 11:45:55,157 INFO: Line 291 -->  Beginning DCIR pulse with current 16.8
+2023-08-02 11:46:00,165 INFO: Line 300 -->  Returning to normal discharge with current 8.4
+2023-08-02 11:48:49,664 INFO: Line 291 -->  Beginning DCIR pulse with current 16.8
+2023-08-02 11:48:54,870 INFO: Line 300 -->  Returning to normal discharge with current 8.4
+2023-08-02 11:51:44,363 INFO: Line 291 -->  Beginning DCIR pulse with current 16.8
+2023-08-02 11:51:49,367 INFO: Line 300 -->  Returning to normal discharge with current 8.4
+2023-08-02 11:54:38,863 INFO: Line 291 -->  Beginning DCIR pulse with current 16.8
+2023-08-02 11:54:43,868 INFO: Line 300 -->  Returning to normal discharge with current 8.4
+2023-08-02 11:57:33,392 INFO: Line 291 -->  Beginning DCIR pulse with current 16.8
+2023-08-02 11:57:38,580 INFO: Line 300 -->  Returning to normal discharge with current 8.4
+2023-08-02 12:00:28,089 INFO: Line 291 -->  Beginning DCIR pulse with current 16.8
+2023-08-02 12:00:33,292 INFO: Line 300 -->  Returning to normal discharge with current 8.4
+2023-08-02 12:03:22,766 INFO: Line 291 -->  Beginning DCIR pulse with current 16.8
+2023-08-02 12:03:27,990 INFO: Line 300 -->  Returning to normal discharge with current 8.4
+2023-08-02 12:06:16,987 INFO: Line 291 -->  Beginning DCIR pulse with current 16.8
+2023-08-02 12:06:22,194 INFO: Line 300 -->  Returning to normal discharge with current 8.4
+2023-08-02 12:09:11,692 INFO: Line 291 -->  Beginning DCIR pulse with current 16.8
+2023-08-02 12:09:16,889 INFO: Line 300 -->  Returning to normal discharge with current 8.4
+2023-08-02 12:11:19,372 INFO: Line 336 -->  Voltage levels reached the stopping point.  Stopping now.
+2023-08-02 12:11:19,384 INFO: Line 34 -->  Successfully shut down load.
+2023-08-02 12:12:19,445 INFO: Line 89 -->  Beginning charge process.
+charge_current = 6
+V_target = 4.2, shutoff_I = 0.05
+t_max = 7560.000000000001
+mah_max = 4200
+2023-08-02 13:35:25,126 INFO: Line 170 -->  Current levels reached the stopping point.  Stopping now.
+2023-08-02 13:35:25,191 INFO: Line 45 -->  Successfully shut down supply.
+2023-08-02 13:36:25,242 INFO: Line 209 -->  Beginning discharge process.
+discharge_current = 12.600000000000001
+shutoff_V = 3.0
+t_max = 1800.0
+mah_max = 4200
+2023-08-02 13:36:27,807 INFO: Line 291 -->  Beginning DCIR pulse with current 25.200000000000003
+2023-08-02 13:36:33,029 INFO: Line 300 -->  Returning to normal discharge with current 12.600000000000001
+2023-08-02 13:38:22,008 INFO: Line 291 -->  Beginning DCIR pulse with current 25.200000000000003
+2023-08-02 13:38:27,209 INFO: Line 300 -->  Returning to normal discharge with current 12.600000000000001
+2023-08-02 13:40:16,710 INFO: Line 291 -->  Beginning DCIR pulse with current 25.200000000000003
+2023-08-02 13:40:21,909 INFO: Line 300 -->  Returning to normal discharge with current 12.600000000000001
+2023-08-02 13:42:10,929 INFO: Line 291 -->  Beginning DCIR pulse with current 25.200000000000003
+2023-08-02 13:42:16,130 INFO: Line 300 -->  Returning to normal discharge with current 12.600000000000001
+2023-08-02 13:44:05,611 INFO: Line 291 -->  Beginning DCIR pulse with current 25.200000000000003
+2023-08-02 13:44:10,829 INFO: Line 300 -->  Returning to normal discharge with current 12.600000000000001
+2023-08-02 13:46:00,310 INFO: Line 291 -->  Beginning DCIR pulse with current 25.200000000000003
+2023-08-02 13:46:05,530 INFO: Line 300 -->  Returning to normal discharge with current 12.600000000000001
+2023-08-02 13:47:54,526 INFO: Line 291 -->  Beginning DCIR pulse with current 25.200000000000003
+2023-08-02 13:47:59,742 INFO: Line 300 -->  Returning to normal discharge with current 12.600000000000001
+2023-08-02 13:49:49,212 INFO: Line 291 -->  Beginning DCIR pulse with current 25.200000000000003
+2023-08-02 13:49:54,217 INFO: Line 300 -->  Returning to normal discharge with current 12.600000000000001
+2023-08-02 13:51:43,713 INFO: Line 291 -->  Beginning DCIR pulse with current 25.200000000000003
+2023-08-02 13:51:43,939 INFO: Line 336 -->  Voltage levels reached the stopping point.  Stopping now.
+2023-08-02 13:51:43,960 INFO: Line 34 -->  Successfully shut down load.
+2023-08-02 13:52:44,012 INFO: Line 89 -->  Beginning charge process.
+charge_current = 6
+V_target = 4.2, shutoff_I = 0.05
+t_max = 7560.000000000001
+mah_max = 4200
+2023-08-02 15:10:02,193 INFO: Line 170 -->  Current levels reached the stopping point.  Stopping now.
+2023-08-02 15:10:02,204 INFO: Line 45 -->  Successfully shut down supply.
+2023-08-02 15:11:02,252 INFO: Line 209 -->  Beginning discharge process.
+discharge_current = 15
+shutoff_V = 3.0
+t_max = 1512.0000000000002
+mah_max = 4200
+2023-08-02 15:11:04,811 INFO: Line 291 -->  Beginning DCIR pulse with current 30
+2023-08-02 15:11:10,010 INFO: Line 300 -->  Returning to normal discharge with current 15
+2023-08-02 15:12:40,009 INFO: Line 291 -->  Beginning DCIR pulse with current 30
+2023-08-02 15:12:45,012 INFO: Line 300 -->  Returning to normal discharge with current 15
+2023-08-02 15:14:15,513 INFO: Line 291 -->  Beginning DCIR pulse with current 30
+2023-08-02 15:14:20,710 INFO: Line 300 -->  Returning to normal discharge with current 15
+2023-08-02 15:15:50,731 INFO: Line 291 -->  Beginning DCIR pulse with current 30
+2023-08-02 15:15:55,932 INFO: Line 300 -->  Returning to normal discharge with current 15
+2023-08-02 15:17:25,912 INFO: Line 291 -->  Beginning DCIR pulse with current 30
+2023-08-02 15:17:30,915 INFO: Line 300 -->  Returning to normal discharge with current 15
+2023-08-02 15:19:01,410 INFO: Line 291 -->  Beginning DCIR pulse with current 30
+2023-08-02 15:19:06,626 INFO: Line 300 -->  Returning to normal discharge with current 15
+2023-08-02 15:20:37,111 INFO: Line 291 -->  Beginning DCIR pulse with current 30
+2023-08-02 15:20:42,113 INFO: Line 300 -->  Returning to normal discharge with current 15
+2023-08-02 15:22:12,612 INFO: Line 291 -->  Beginning DCIR pulse with current 30
+2023-08-02 15:22:12,843 INFO: Line 336 -->  Voltage levels reached the stopping point.  Stopping now.
+2023-08-02 15:22:12,864 INFO: Line 34 -->  Successfully shut down load.

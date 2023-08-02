@@ -236,7 +236,7 @@ def discharge_cell(data_path, discharge_current, mah_max=4200, shutoff_V=3.00, t
         quit()
     
     # get filename
-    output_file = get_filename(data_path, f"discharge_{discharge_current}A" + "" if pulse_current==None else "_pulse_{pulse_current}A")
+    output_file = get_filename(data_path, f"discharge_{discharge_current}A" + ("" if pulse_current==None else f"_pulse_{pulse_current}A"))
 
     # prep csvfile with fields
     fields = ['Time', 'Voltage', 'Current', 'Total mAh', 'Temperature']
@@ -333,8 +333,13 @@ def discharge_cell(data_path, discharge_current, mah_max=4200, shutoff_V=3.00, t
                 break
 
             if V < shutoff_V:
-                logging.info(f"Voltage levels reached the stopping point.  Stopping now.")
-                break
+                if pulsing:
+                    load.set_I(discharge_current)
+                    pulsing = False
+                    pulse_current = None
+                else:
+                    logging.info(f"Voltage levels reached the stopping point.  Stopping now.")
+                    break
         except:
             logging.error("Could not check end conditions.  Attempting shutdown.")
             shut_down_load()
@@ -383,13 +388,13 @@ def do_cycle():
         # wait 1 min for cell to recover
         time.sleep(60)
 
-        print(f"Preparing for {C}A discharge")
+        print(f"Preparing for {current}A discharge")
         charge_cell(data_path, 6)
 
         # wait 1 min for cell to settle
         time.sleep(60)
 
-        print(f"Discharging at {C}A")
+        print(f"Discharging at {current}A")
         discharge_cell(data_path, current, pulse_current=current*2)
 
 if get_temp() is None:
