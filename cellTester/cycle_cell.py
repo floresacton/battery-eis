@@ -218,8 +218,8 @@ def discharge_cell(data_path, discharge_current, mah_max=4200, shutoff_V=2.5, t_
     pulse_time = 10 # seconds
 
     # define points where DCIR pulse should occur
-    n = 10 # of pulses
-    pulse_points = np.linspace(0, 1-(1/n), n)
+    n_pulses = 10 # of pulses
+    pulse_points = np.linspace(0, 1-(1/n_pulses), n_pulses)
     pulse_idx = 0 # index of which pulse should occur next
     
     # track mAh
@@ -287,10 +287,9 @@ def discharge_cell(data_path, discharge_current, mah_max=4200, shutoff_V=2.5, t_
             SOC = total_mah / mah_max
             
             # check to see if state change is required
-            if pulsing == False and SOC > pulse_points[pulse_idx]:
+            if pulse_idx < n_pulses and pulsing == False and SOC > pulse_points[pulse_idx]:
                 logging.info(f"Beginning DCIR pulse with current {pulse_current}")
                 pulsing = True
-                pulse_idx += 1
                 pulse_timer = time.time()
 
                 # change current drawn
@@ -299,6 +298,9 @@ def discharge_cell(data_path, discharge_current, mah_max=4200, shutoff_V=2.5, t_
             elif pulsing == True and time.time() > pulse_timer + pulse_time:
                 logging.info(f"Returning to normal discharge with current {discharge_current}")
                 pulsing = False
+
+                # increment pulse current
+                pulse_idx += 1
 
                 # reset discharge current
                 load.set_I(discharge_current)
