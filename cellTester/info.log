@@ -5505,3 +5505,51 @@ Equipment turned off due to signal 2.  Exiting.
 2023-08-03 10:44:39,078 INFO: Line 45 -->  Successfully shut down supply.
 2023-08-03 10:44:39,078 ERROR: Line 52 -->  
 Equipment turned off due to signal 2.  Exiting.
+2023-08-03 10:48:51,157 INFO: Line 89 -->  Beginning charge process.
+charge_current = 6
+V_target = 4.2, shutoff_I = 0.1
+t_max = 9000.0
+mah_max = 5000
+2023-08-03 11:47:37,365 INFO: Line 170 -->  Current levels reached the stopping point.  Stopping now.
+2023-08-03 11:47:37,431 INFO: Line 45 -->  Successfully shut down supply.
+2023-08-03 11:48:37,485 INFO: Line 209 -->  Beginning discharge process.
+discharge_current = 1
+shutoff_V = 2.5
+t_max = 22680.000000000004
+mah_max = 4200
+2023-08-03 11:49:30,739 INFO: Line 34 -->  Successfully shut down load.
+2023-08-03 11:49:30,748 INFO: Line 45 -->  Successfully shut down supply.
+2023-08-03 11:49:30,749 ERROR: Line 52 -->  
+Equipment turned off due to signal 2.  Exiting.
+2023-08-03 11:50:57,315 INFO: Line 89 -->  Beginning charge process.
+charge_current = 6
+V_target = 4.2, shutoff_I = 0.1
+t_max = 9000.0
+mah_max = 5000
+2023-08-03 11:56:25,450 INFO: Line 170 -->  Current levels reached the stopping point.  Stopping now.
+2023-08-03 11:56:25,515 INFO: Line 45 -->  Successfully shut down supply.
+2023-08-03 11:57:25,576 INFO: Line 209 -->  Beginning discharge process.
+discharge_current = 5
+shutoff_V = 2.5
+t_max = 4536.000000000001
+mah_max = 4200
+2023-08-03 11:57:28,148 INFO: Line 291 -->  Beginning DCIR pulse with current 10
+2023-08-03 11:57:38,158 INFO: Line 300 -->  Returning to normal discharge with current 5
+2023-08-03 12:02:20,166 INFO: Line 291 -->  Beginning DCIR pulse with current 10
+2023-08-03 12:02:30,188 INFO: Line 300 -->  Returning to normal discharge with current 5
+2023-08-03 12:07:12,162 INFO: Line 291 -->  Beginning DCIR pulse with current 10
+2023-08-03 12:07:22,361 INFO: Line 300 -->  Returning to normal discharge with current 5
+2023-08-03 12:12:04,367 INFO: Line 291 -->  Beginning DCIR pulse with current 10
+2023-08-03 12:12:14,380 INFO: Line 300 -->  Returning to normal discharge with current 5
+2023-08-03 12:16:56,380 INFO: Line 291 -->  Beginning DCIR pulse with current 10
+2023-08-03 12:17:06,390 INFO: Line 300 -->  Returning to normal discharge with current 5
+2023-08-03 12:21:48,868 INFO: Line 291 -->  Beginning DCIR pulse with current 10
+2023-08-03 12:21:58,872 INFO: Line 300 -->  Returning to normal discharge with current 5
+2023-08-03 12:26:40,888 INFO: Line 291 -->  Beginning DCIR pulse with current 10
+2023-08-03 12:26:50,893 INFO: Line 300 -->  Returning to normal discharge with current 5
+2023-08-03 12:31:32,869 INFO: Line 291 -->  Beginning DCIR pulse with current 10
+2023-08-03 12:31:43,071 INFO: Line 300 -->  Returning to normal discharge with current 5
+2023-08-03 12:36:25,073 INFO: Line 291 -->  Beginning DCIR pulse with current 10
+2023-08-03 12:36:35,074 INFO: Line 300 -->  Returning to normal discharge with current 5
+2023-08-03 12:41:17,070 INFO: Line 291 -->  Beginning DCIR pulse with current 10
+2023-08-03 12:41:27,074 INFO: Line 300 -->  Returning to normal discharge with current 5

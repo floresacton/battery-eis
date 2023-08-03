@@ -376,9 +376,9 @@ def do_cycle():
     data_path = f"celldata/{directories[cell_idx-1]}/"
 
     # do cycle at 1 Amp
-    charge_cell(data_path, 6)
-    time.sleep(60)
-    discharge_cell(data_path, 1, pulse_current=None)
+    #charge_cell(data_path, 6)
+    #time.sleep(60)
+    #discharge_cell(data_path, 1, pulse_current=None)
 
     # cycle with intermittent pulsing
     # pulse at 2x discharge current
