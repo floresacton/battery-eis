@@ -5465,3 +5465,43 @@ mah_max = 4200
 2023-08-02 15:22:12,612 INFO: Line 291 -->  Beginning DCIR pulse with current 30
 2023-08-02 15:22:12,843 INFO: Line 336 -->  Voltage levels reached the stopping point.  Stopping now.
 2023-08-02 15:22:12,864 INFO: Line 34 -->  Successfully shut down load.
+2023-08-02 15:54:35,021 INFO: Line 34 -->  Successfully shut down load.
+2023-08-02 15:54:35,036 INFO: Line 45 -->  Successfully shut down supply.
+2023-08-02 15:54:35,037 ERROR: Line 52 -->  
+Equipment turned off due to signal 2.  Exiting.
+2023-08-02 15:54:54,858 INFO: Line 89 -->  Beginning charge process.
+charge_current = 6
+V_target = 4.2, shutoff_I = 0.1
+t_max = 9000.0
+mah_max = 5000
+2023-08-02 15:55:21,186 INFO: Line 34 -->  Successfully shut down load.
+2023-08-02 15:55:21,195 INFO: Line 45 -->  Successfully shut down supply.
+2023-08-02 15:55:21,195 ERROR: Line 52 -->  
+Equipment turned off due to signal 2.  Exiting.
+2023-08-02 15:56:44,475 INFO: Line 89 -->  Beginning charge process.
+charge_current = 6
+V_target = 4.2, shutoff_I = 0.1
+t_max = 9000.0
+mah_max = 5000
+2023-08-02 16:58:36,144 INFO: Line 170 -->  Current levels reached the stopping point.  Stopping now.
+2023-08-02 16:58:36,156 INFO: Line 45 -->  Successfully shut down supply.
+2023-08-02 16:59:36,217 INFO: Line 209 -->  Beginning discharge process.
+discharge_current = 1
+shutoff_V = 2.5
+t_max = 22680.000000000004
+mah_max = 4200
+2023-08-02 20:59:56,350 INFO: Line 341 -->  Voltage levels reached the stopping point.  Stopping now.
+2023-08-02 20:59:56,358 INFO: Line 34 -->  Successfully shut down load.
+2023-08-02 21:00:56,379 INFO: Line 89 -->  Beginning charge process.
+charge_current = 6
+V_target = 4.2, shutoff_I = 0.1
+t_max = 9000.0
+mah_max = 5000
+2023-08-02 21:13:40,399 INFO: Line 34 -->  Successfully shut down load.
+2023-08-02 21:13:40,411 INFO: Line 45 -->  Successfully shut down supply.
+2023-08-02 21:13:40,411 ERROR: Line 52 -->  
+Equipment turned off due to signal 2.  Exiting.
+2023-08-03 10:44:39,007 INFO: Line 34 -->  Successfully shut down load.
+2023-08-03 10:44:39,078 INFO: Line 45 -->  Successfully shut down supply.
+2023-08-03 10:44:39,078 ERROR: Line 52 -->  
+Equipment turned off due to signal 2.  Exiting.
