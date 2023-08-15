@@ -389,8 +389,8 @@ def do_cycle():
 
     # cycle with intermittent pulsing
     # pulse at 2x discharge current
-    #currents = [1, 5, 10, 15]
-    currents = [5, 10, 15]
+    currents = [1, 5, 10, 15]
+    #currents = [5, 10, 15]
     for current in currents:
         # wait 1 min for cell to recover
         time.sleep(60)
