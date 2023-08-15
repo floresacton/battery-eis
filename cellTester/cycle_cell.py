@@ -377,10 +377,15 @@ def do_cycle():
     # define path to write data
     data_path = f"celldata/{directories[cell_idx-1]}/"
 
+    #### BEGIN MIGUEL ####
+
     # do cycle at 1 Amp
-    #charge_cell(data_path, 6)
-    #time.sleep(60)
-    #discharge_cell(data_path, 1, pulse_current=None)
+	# this is extremely slow, a 4.2 Ah cell should take 4.2 hours
+	# will actually be slightly less, due to voltage sagging +
+	# termination occuring at voltage setpoint
+    charge_cell(data_path, 6)
+    time.sleep(60) # allow cell dynamics to die out
+    discharge_cell(data_path, 1, pulse_current=None)
 
     # cycle with intermittent pulsing
     # pulse at 2x discharge current
@@ -397,6 +402,8 @@ def do_cycle():
 
         discharge_cell(data_path, current, pulse_current=current*2)
 
+    #### END MIGUEL ####
+	
 if get_temp() is None:
     raise(Exception("Temperature sensor is not working.  Did you run temp_sens.py in the background?"))
 
