@@ -1,0 +1,24 @@
+import device_bridge
+import time
+
+load = device_bridge.Load()
+supply = device_bridge.Supply()
+print("Init working")
+
+load.on()
+supply.on()
+print("Load and Supply turned on")
+
+time.sleep(5)
+print("sleep for 5")
+
+
+supply.set_V(3)
+supply.set_I(1)
+supply.on()
+
+time.sleep(5)
+
+load.off()
+supply.off()
+print("Supply and load turned off")

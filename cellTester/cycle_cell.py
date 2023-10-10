@@ -383,17 +383,18 @@ def do_cycle():
 	# this is extremely slow, a 4.2 Ah cell should take 4.2 hours
 	# will actually be slightly less, due to voltage sagging +
 	# termination occuring at voltage setpoint
-    charge_cell(data_path, 6)
-    time.sleep(60) # allow cell dynamics to die out
-    discharge_cell(data_path, 1, pulse_current=None)
+    #charge_cell(data_path, 6)
+    #time.sleep(60) # allow cell dynamics to die out
+    #discharge_cell(data_path, 1, pulse_current=None)
 
     # cycle with intermittent pulsing
     # pulse at 2x discharge current
-    currents = [1, 5, 10, 15]
+    #currents = [1, 5, 10, 15]
     #currents = [5, 10, 15]
+    currents = [1]
     for current in currents:
         # wait 1 min for cell to recover
-        time.sleep(60)
+        #time.sleep(60)
 
         charge_cell(data_path, 6)
 

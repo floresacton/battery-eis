@@ -5653,3 +5653,88 @@ mah_max = 4200
 2023-08-03 17:40:41,043 INFO: Line 291 -->  Beginning DCIR pulse with current 30
 2023-08-03 17:40:59,945 INFO: Line 343 -->  Voltage levels reached the stopping point.  Stopping now.
 2023-08-03 17:40:59,957 INFO: Line 34 -->  Successfully shut down load.
+2023-08-22 15:18:40,930 INFO: Line 89 -->  Beginning charge process.
+charge_current = 6
+V_target = 4.2, shutoff_I = 0.1
+t_max = 9000.0
+mah_max = 5000
+2023-08-22 15:19:55,059 INFO: Line 34 -->  Successfully shut down load.
+2023-08-22 15:19:55,127 INFO: Line 45 -->  Successfully shut down supply.
+2023-08-22 15:19:55,128 ERROR: Line 52 -->  
+Equipment turned off due to signal 2.  Exiting.
+2023-08-22 15:19:55,129 ERROR: Line 130 -->  Unable to measure supply current.  Attempting shutdown.
+2023-08-22 15:19:55,199 INFO: Line 45 -->  Successfully shut down supply.
+2023-08-22 15:20:36,925 INFO: Line 89 -->  Beginning charge process.
+charge_current = 6
+V_target = 4.2, shutoff_I = 0.1
+t_max = 9000.0
+mah_max = 5000
+2023-08-22 15:20:45,589 INFO: Line 34 -->  Successfully shut down load.
+2023-08-22 15:20:45,658 INFO: Line 45 -->  Successfully shut down supply.
+2023-08-22 15:20:45,659 ERROR: Line 52 -->  
+Equipment turned off due to signal 2.  Exiting.
+2023-08-22 15:25:27,168 INFO: Line 89 -->  Beginning charge process.
+charge_current = 6
+V_target = 4.2, shutoff_I = 0.1
+t_max = 9000.0
+mah_max = 5000
+2023-08-22 15:25:58,433 INFO: Line 34 -->  Successfully shut down load.
+2023-08-22 15:25:58,500 INFO: Line 45 -->  Successfully shut down supply.
+2023-08-22 15:25:58,501 ERROR: Line 52 -->  
+Equipment turned off due to signal 2.  Exiting.
+2023-08-25 12:21:50,098 INFO: Line 34 -->  Successfully shut down load.
+2023-08-25 12:21:50,168 INFO: Line 45 -->  Successfully shut down supply.
+2023-08-25 12:21:50,169 ERROR: Line 52 -->  
+Equipment turned off due to signal 2.  Exiting.
+2023-08-25 12:22:52,071 INFO: Line 34 -->  Successfully shut down load.
+2023-08-25 12:22:52,136 INFO: Line 45 -->  Successfully shut down supply.
+2023-08-25 12:22:52,137 ERROR: Line 52 -->  
+Equipment turned off due to signal 2.  Exiting.
+2023-08-25 12:25:58,351 INFO: Line 89 -->  Beginning charge process.
+charge_current = 6
+V_target = 4.2, shutoff_I = 0.1
+t_max = 9000.0
+mah_max = 5000
+2023-08-25 13:18:52,795 INFO: Line 170 -->  Current levels reached the stopping point.  Stopping now.
+2023-08-25 13:18:52,860 INFO: Line 45 -->  Successfully shut down supply.
+2023-08-25 13:19:52,917 INFO: Line 209 -->  Beginning discharge process.
+discharge_current = 1
+shutoff_V = 2.5
+t_max = 22680.000000000004
+mah_max = 4200
+2023-08-25 17:32:04,273 WARNING: Line 334 -->  Total mah Exceeded! Total mah: 4200.134291250046.  Stopping now.
+2023-08-25 17:32:04,284 INFO: Line 34 -->  Successfully shut down load.
+2023-08-29 13:20:05,805 INFO: Line 89 -->  Beginning charge process.
+charge_current = 6
+V_target = 4.2, shutoff_I = 0.1
+t_max = 9000.0
+mah_max = 5000
+2023-08-29 14:18:21,829 INFO: Line 170 -->  Current levels reached the stopping point.  Stopping now.
+2023-08-29 14:18:21,896 INFO: Line 45 -->  Successfully shut down supply.
+2023-08-29 14:19:21,930 INFO: Line 209 -->  Beginning discharge process.
+discharge_current = 1
+shutoff_V = 2.5
+t_max = 22680.000000000004
+mah_max = 4200
+2023-08-29 14:19:24,492 INFO: Line 291 -->  Beginning DCIR pulse with current 2
+2023-08-29 14:19:34,508 INFO: Line 299 -->  Returning to normal discharge with current 1
+2023-08-29 14:44:27,723 INFO: Line 291 -->  Beginning DCIR pulse with current 2
+2023-08-29 14:44:37,724 INFO: Line 299 -->  Returning to normal discharge with current 1
+2023-08-29 15:09:30,244 INFO: Line 291 -->  Beginning DCIR pulse with current 2
+2023-08-29 15:09:40,258 INFO: Line 299 -->  Returning to normal discharge with current 1
+2023-08-29 15:34:32,267 INFO: Line 291 -->  Beginning DCIR pulse with current 2
+2023-08-29 15:34:42,269 INFO: Line 299 -->  Returning to normal discharge with current 1
+2023-08-29 15:59:34,834 INFO: Line 291 -->  Beginning DCIR pulse with current 2
+2023-08-29 15:59:45,012 INFO: Line 299 -->  Returning to normal discharge with current 1
+2023-08-29 16:24:37,550 INFO: Line 291 -->  Beginning DCIR pulse with current 2
+2023-08-29 16:24:47,744 INFO: Line 299 -->  Returning to normal discharge with current 1
+2023-08-29 16:49:40,263 INFO: Line 291 -->  Beginning DCIR pulse with current 2
+2023-08-29 16:49:50,264 INFO: Line 299 -->  Returning to normal discharge with current 1
+2023-08-29 17:14:42,803 INFO: Line 291 -->  Beginning DCIR pulse with current 2
+2023-08-29 17:14:52,973 INFO: Line 299 -->  Returning to normal discharge with current 1
+2023-08-29 17:39:45,489 INFO: Line 291 -->  Beginning DCIR pulse with current 2
+2023-08-29 17:39:55,498 INFO: Line 299 -->  Returning to normal discharge with current 1
+2023-08-29 18:04:48,501 INFO: Line 291 -->  Beginning DCIR pulse with current 2
+2023-08-29 18:04:58,504 INFO: Line 299 -->  Returning to normal discharge with current 1
+2023-08-29 18:29:51,408 WARNING: Line 334 -->  Total mah Exceeded! Total mah: 4200.082113138925.  Stopping now.
+2023-08-29 18:29:51,419 INFO: Line 34 -->  Successfully shut down load.
