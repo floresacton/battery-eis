@@ -392,15 +392,15 @@ def do_cycle():
     #currents = [5, 10, 15]
     #currents = [1]
     for current in currents:
-        # wait 1 min for cell to recover
-        time.sleep(60)
-
         charge_cell(data_path, 6)
 
         # wait 1 min for cell to settle
         time.sleep(60)
 
         discharge_cell(data_path, current, pulse_current=current*2)
+
+        # wait 1 min for cell to recover
+        time.sleep(60)
 
     #### END MIGUEL ####
 	
