@@ -82,9 +82,9 @@ def charge_cell(data_path, charge_current, V_target=4.2, mah_max=5000, shutoff_I
 
     # charge cell until current is smaller than set value
 
+    # default max time of 24 hours
     if t_max is None:
-        # must be charged at at least 1C
-        t_max = mah_max/1000 * 3 * 3600 / charge_current
+        t_max = 24 * 60 * 60 # 24 hours
 
     logging.info(f"Beginning charge process.\ncharge_current = {str(charge_current)}\nV_target = {str(V_target)}, shutoff_I = {str(shutoff_I)}\nt_max = {str(t_max)}\nmah_max = {str(mah_max)}")
 
@@ -155,7 +155,7 @@ def charge_cell(data_path, charge_current, V_target=4.2, mah_max=5000, shutoff_I
 
         ## check for end conditions ##
         # time > t_max
-        # total Q > 4.2Ah
+        # total Q > mah_max
         # I < I_shutoff
         try:
             if time.time() - t0 > t_max:
@@ -197,13 +197,12 @@ Continue to check if end conditions are met to terminate early, even while pulsi
 """
 #####
 
-def discharge_cell(data_path, discharge_current, mah_max=4200, shutoff_V=2.5, t_max=None, pulse_current=None):
+def discharge_cell(data_path, discharge_current, mah_max=5000, shutoff_V=2.5, t_max=None, pulse_current=None):
     # discharge cell until cell voltage is shutoff voltage
 
-    # init t_max to default value if not done so
+    # default max time of 24 hours
     if t_max is None:
-        # must be discharged at at least 1C
-        t_max = mah_max/1000 * 1.5 * 3600 / discharge_current
+        t_max = 24 * 60 * 60 # 24 hours
 
     # log discharge info
     logging.info(f"Beginning discharge process.\ndischarge_current = {str(discharge_current)}\nshutoff_V = {str(shutoff_V)}\nt_max = {str(t_max)}\nmah_max = {str(mah_max)}")
@@ -389,12 +388,12 @@ def do_cycle():
 
     # cycle with intermittent pulsing
     # pulse at 2x discharge current
-    #currents = [1, 5, 10, 15]
+    currents = [0.5, 1, 5, 10, 15]
     #currents = [5, 10, 15]
-    currents = [1]
+    #currents = [1]
     for current in currents:
         # wait 1 min for cell to recover
-        #time.sleep(60)
+        time.sleep(60)
 
         charge_cell(data_path, 6)
 
