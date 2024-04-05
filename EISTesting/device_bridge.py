@@ -1,15 +1,5 @@
 import time
-import pyvisa
 import usbtmc
-
-ip_load = "10.42.0.78"
-
-ip_supply = "10.42.0.46"
-
-rm = pyvisa.ResourceManager()
-
-def instr_address(ip):
-    return f"TCPIP::{ip}::INSTR"
 
 class SigGen:
     sig_gen = None
@@ -19,10 +9,9 @@ class SigGen:
         retries = 10
         while retries > 0:
             try:
-                devs = usbtmc.list_resources()
-                dev = devs[0]
-                sig_gen = usbtmc.Instrument(dev)
-                print(f"selected dev {dev}")
+                addr = "USB::62700::4355::SDG1XDDQ7R3310::INSTR"
+                sig_gen = usbtmc.Instrument(addr)
+                print(f"selected dev {addr}")
                 self.sig_gen = sig_gen
 
                 self.sig_gen.write("C1:OUTP OFF")
