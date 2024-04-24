@@ -1,0 +1,48 @@
+Swap bat 1
+Csv1: 30A .5s 
+CSV2 30A 1s
+Csv 3 30A 5s
+
+Swap bat 2
+
+CSV4 45A .5s FAILED UNDER V (38V SET, 34V MEAS)
+
+Csv5 40a .5s FAILED UNDER V (38v set, 35v meas)
+
+CSV6 35A .5s FAILED UNDER V
+
+DISABLED V MIN(voltage at load != voltage of battery, i made mistake)
+
+CSV7 50A .5S
+Csv 8 50A 1s
+Csv9 50A 5s
+
+Swap bat 3 temp
+Csv10 65A .5s
+Csv11 65A 1s
+Csv12 65A 5s
+ 
+Csv13 65A 5s. RERUN CURRENT LOOKED LOW NOT SURE
+
+Confirmed pickles too large
+Going to find max testable current and instead push duration
+
+Csv14 60A .5s
+RERUN OOPS
+
+Csv15 60A .5
+CSV16 60A 1s
+Csv17 60A 5s
+FAILED AGAIN REALIZED
+
+Csv18 55A 15s
+Failed 
+
+Csv19 50A 15s
+FAILED, TEMP MUGHT BE TOO LOW
+
+Csv 20 35A 15s
+Try again,  worked
+Now
+
+
