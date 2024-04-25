@@ -5,7 +5,7 @@ class SigGen:
     sig_gen = None
 
     def __init__(self):
-        print("Connecting signal generator")
+        print("Connecting signal generator....")
         retries = 10
         while retries > 0:
             try:
@@ -59,3 +59,56 @@ class SigGen:
 
 if __name__ == "__main__":
     sg = SigGen()
+
+
+class Scope:
+
+    def __init__(self):
+        print("Connecting to Oscilloscope...")
+        retries = 10
+        while retries > 0:
+            try:
+                addrs = usbtmc.list_resources()
+                osc_addr = "USB::1689::932::C030786::INSTR"
+                assert osc_addr in addrs, "no scope"
+                osc = usbtmc.Instrument(osc_addr)
+                print("USBTMC list resources: ", end='')
+                print(addrs)
+                print("OSC address: ", end='')
+                print(osc_addr)
+                print(osc.ask("*IDN?"))
+
+                return
+
+            except:
+                retries -= 1
+                time.sleep(.5)
+        raise(Exception(f"Failed to connect to signal generator at addr {dev_addr}"))
+
+#    def on(self, channel=1):
+#        if channel == 1:
+#            self.sig_gen.write("C1:OUTP ON")
+#        elif channel == 2:
+#            self.sig_gen.write("C2:OUTP ON")
+#
+#    def off(self, channel=1):
+#        if channel == 1:
+#            self.sig_gen.write("C1:OUTP OFF")
+#        elif channel == 2:
+#            self.sig_gen.write("C2:OUTP OFF")
+#
+#    def set_freq(self, freq, channel=1):
+#        if channel == 1:
+#            self.sig_gen.write(f"C1:BSWV FRQ, {freq}")
+#        elif channel == 2:
+#            self.sig_gen.write(f"C2:BSWV FRQ, {freq}")
+#
+#    def set_amp(self, amp, channel=1):
+#        # amp in volts
+#        if channel == 1:
+#            self.sig_gen.write(f"C1:BSWV AMP, {amp}")
+#        elif channel == 2:
+#            self.sig_gen.write(f"C2:BSWV AMP, {amp}")
+#
+
+
