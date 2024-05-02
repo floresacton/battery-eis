@@ -56,6 +56,25 @@ class SigGen:
             self.sig_gen.write(f"C1:BSWV AMP, {amp}")
         elif channel == 2:
             self.sig_gen.write(f"C2:BSWV AMP, {amp}")
+   
+    def set_DC_mode(self, channel=1):
+        if channel == 1:
+            self.sig_gen.write("C1:BSWV WVTP, DC")
+        elif channel == 2:
+            self.sig_gen.write("C2:BSWV WVTP, DC")
+
+    def set_sine_mode(self, channel=1):
+        if channel == 1:
+            self.sig_gen.write("C1:BSWV WVTP, SINE")
+        elif channel == 2:
+            self.sig_gen.write("C2:BSWV WVTP, SINE:")
+
+    def set_voltage(self, offset, channel=1):
+        if channel == 1:
+            self.sig_gen.write(f"C1:BSWV OFST, {offset}")
+        elif channel == 2:
+            self.sig_gen.write(f"C2:BSWV OFST, {offset}")
+
 
 if __name__ == "__main__":
     sg = SigGen()
