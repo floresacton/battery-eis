@@ -1,3 +1,14 @@
-cellTester/current.temperature
+### Python ###
+__pycache__/
 
+### KiCad ###
+backups/
 *-backups/
+*.lck
+*.log
+fp-info-cache
+*auto_saved_files*
+
+### Obsidian ###
+.obsidian/
+
