@@ -15,11 +15,11 @@ class Gen:
         self.gen.write(f"C{chan}:BSWV WVTP, {mode}")
 
     def set_freq(self, freq, chan):
-        self.gen.write(f"C{chan}:BSWV FRQ, {freq}")
+        self.gen.write(f"C{chan}:BSWV FRQ, {freq:.0f}")
 
     def set_amplitude(self, chan, amplitude):
-        # amp in volts
-        self.gen.write(f"C{chan}:BSWV AMP, {amplitude}")
+        # amplitude in volts
+        self.gen.write(f"C{chan}:BSWV AMP, {amplitude:.3f}")
 
     def set_offset(self, chan, offset):
-        self.gen.write(f"C{chan}:BSWV OFST, {offset}")
+        self.gen.write(f"C{chan}:BSWV OFST, {offset:.3f}")
