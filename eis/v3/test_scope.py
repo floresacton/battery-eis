@@ -1,7 +1,8 @@
 import time
 
-from plotter import plot
-from scope import Scope
+from tools.scope import Scope
+
+from eis.v3.tools.plotter import plot
 
 # device ID: USB0::62700::4119::SDS08A0X804131::0::INSTR
 scope = Scope("USB::62700::4119::SDS08A0X804131::INSTR")
