@@ -90,6 +90,12 @@ class Scope:
 
     #############
 
+    # def memory_set(self, num, cmd, val):
+    #     self.set(f"MEM{num}", cmd, val)
+
+    def timebase_set(self, sdiv):
+        self.set("TIM", "SCAL", f"{sdiv:.2E}")
+
     def aquire_set(self, cmd, val):
         self.set("ACQ", cmd, val)
 
@@ -105,6 +111,12 @@ class Scope:
     def channel_set(self, num, cmd, val):
         self.set(f"CHAN{num}", cmd, val)
     
+    def trigger_set_level(self, voltage):
+        self.set("TRIG", "EDGE:LEV", f"{voltage:.2E}")
+    
+    def trigger_set_mode(self, mode):
+        self.set("TRIG", "MODE", mode)
+
     def trigger_run(self):
         self.scope.write(f":TRIG:RUN")
         self.block_complete()

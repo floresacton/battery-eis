@@ -10,10 +10,10 @@ class Supply():
         self.supply.write(f"OUTP CH{chan},{'ON' if state else 'OFF'}")
     
     def set_voltage(self, chan, voltage):
-        self.supply.write(f"CH{chan}:VOLT {voltage:.3f}")
+        self.supply.write(f"CH{chan}:VOLT {voltage:.6}")
     
     def set_current(self, chan, current):
-        self.supply.write(f"CH{chan}:CURR {current:.3f}")
+        self.supply.write(f"CH{chan}:CURR {current:.6}")
 
     def get_voltage(self, chan):
         # return setpoint
