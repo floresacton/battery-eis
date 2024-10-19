@@ -2,28 +2,31 @@ import math
 import sys
 import time
 
+import matplotlib.pyplot as plt
+import numpy as np
 from colorama import Fore, Style, init
+from tools.fitter import sine_fit
 from tools.gen import Gen
 from tools.plotter import plot
 from tools.scope import Scope
 
-# test every 2^n freq
+# test every 2^n freq inclusive
 freq_exp2_start = 4 # 16Hz
 freq_exp2_end = 13 # 8192Hz
-freq_exp2_step = 2 # x4 Hz
+freq_exp2_step = 0.2 # x2 Hz
 
-# offset in V
-offset_start = 0
-offset_end = 4
+# offset in amps inclusive
+offset_start = 5
+offset_end = 5
 offset_step = 1
 
 # current amplitude
-current_amplitude = 10
+current_amplitude = 5
 
 # constant delay
-constant_delay = 0.25
+constant_delay = 0.5
 # delay by x periods
-period_delays = 15
+period_delays = 20
 
 # visible in width
 periods_visible = 5
@@ -31,8 +34,25 @@ periods_visible = 5
 # number of points to sample
 sample_points = 10000
 
+# save raw points
+save_points = True
+
+# save fit sinusoid
+save_sine_fit = True
+
+# number of bops activated
+active_bops = 1
+
+# resistances to calculate ranges
+shunt_resistance = 0.00375
+neg_wire_resistance = 0.004
+cell_resistance = 0.015 # best estimate
+
+# nominal testing voltage
+cell_voltage = 3.2
+
 # (channel, probe attenuation)
-scope_config = [(1, 1), (2, 10), (3, 10)]
+scope_config = [(1, 1), (2, 10), (3, 10), (4, 10)]
 
 ##### end config #####
 init(autoreset=True)
@@ -78,8 +98,9 @@ for schan in scope_config:
     scope.channel_set(schan[0], "PROB", f"VAL,{'{:.2E}'.format(schan[1])}")
 
 scope.channel_set(1, "SCAL", "1")
-scope.channel_set(2, "SCAL", "0.05")
-scope.channel_set(3, "SCAL", "0.1")
+scope.channel_set(2, "SCAL", f"{0.005*current_amplitude:.2E}")
+scope.channel_set(3, "SCAL", f"{0.005*current_amplitude:.2E}")
+scope.channel_set(4, "SCAL", f"{0.05*current_amplitude:.2E}")
 
 # setup trigger
 scope.trigger_set_level(1)
@@ -104,6 +125,7 @@ print(Fore.GREEN + f"Finished Initialization")
 freq_exp2_test = freq_exp2_start
 freq_test = math.pow(2, freq_exp2_test)
 offset_test = offset_start
+waveform_interval = 0
 
 def setup_freq():
     # set scope horizontal scale for "periods_visible" waveforms
@@ -122,12 +144,17 @@ def setup_freq():
         print(Fore.RED + f"Not enough available points: {total_points:.2E}")
         sys.exit(1)
 
-    scope.waveform_set("INT", total_points/sample_points)
+    global waveform_interval
+    waveform_interval = total_points/sample_points
+    scope.waveform_set("INT", waveform_interval)
 
 def setup_offset():
-    gen.set_offset(1, offset_test)
+    gen.set_offset(1, offset_test/active_bops)
 
-    #TODO scale scope to read
+    center_current = 2*offset_test
+    scope.channel_set(2, "OFFS", f"{center_current*shunt_resistance:.2E}")
+    scope.channel_set(3, "OFFS", f"{center_current*(shunt_resistance+neg_wire_resistance):.2E}")
+    scope.channel_set(4, "OFFS", f"{center_current*(shunt_resistance+neg_wire_resistance+cell_resistance)-cell_voltage:.2E}")
 
 #### data format ####
 # inside test folder in data
@@ -136,22 +163,34 @@ def setup_offset():
 
 def log_result():
     data = []
-    for schan in scope_config:
-        scope.waveform_set("SOUR", f"C{schan[0]}")
+    for chan in [2,3,4]:
+        scope.waveform_set("SOUR", f"C{chan}")
         header = scope.waveform_preamble()
-        data.append((header, scope.waveform_data(header)))
+        data.append(scope.waveform_data(header, waveform_interval))
 
-    # plot(data[0][1], data[1][1], data[2][1])
+    current = data[0]
+    voltage = current.copy()
+    voltage[:, 1] = data[2][:, 1] - data[1][:, 1]
 
-    #TODO write to csv file
-    # for each chan
-    # (x)_time, (x)_voltage
+    if save_points:
+        # log current
+        # log voltage
+        # (x)_time, (x)_voltage
+        pass
+
+    fit_current = sine_fit(current, freq_test)
+    fit_voltage = sine_fit(voltage, freq_test)
+
+    if save_sine_fit:
+        # log ABCD constants
+        # for current and voltage
+        pass
 
 
-while freq_exp2_test < freq_exp2_end:
+while freq_exp2_test <= freq_exp2_end:
     setup_freq()
 
-    while offset_test < offset_end:
+    while offset_test <= offset_end:
         setup_offset()
         print(Fore.MAGENTA + f"Running Test: Freq - {freq_test}, Offset - {offset_test}")
 

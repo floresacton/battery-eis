@@ -7,9 +7,10 @@ from tools.scope import Scope
 scope = Scope("USB::62700::4119::SDS08A0X804131::INSTR")
 
 # scope.reset()
+scope.channel_set(1, "OFFS", "4")
 
-total_points = float(scope.aquire_get("SRAT"))
-print(total_points)
+# total_points = float(scope.aquire_get("SRAT"))
+# print(total_points)
 
 # config channel 1
 # scope.channel_set(1, "SWIT", "ON")

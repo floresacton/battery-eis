@@ -1,6 +1,7 @@
 import struct
 import time
 
+import numpy as np
 import usbtmc
 
 
@@ -135,7 +136,7 @@ class Scope:
             "=16s16shhi20xi12x16s24xi12xii4xii4xfff4xhhfd136xhhfhh8xh"
         )
 
-    def waveform_data(self, header):
+    def waveform_data(self, header, interval):
         self.scope.write(":WAV:DATA?")
         length, data = parse_header(self.scope.read_raw())
 
@@ -145,8 +146,8 @@ class Scope:
         points = []
         for i in range(len(values)):
             voltage = (values[i]*(header[12]/header[14])-header[13])*header[21]
-            timestamp = header[18] - (self.timebases[header[19]] * self.hgrids/2) + i*header[17]
+            timestamp = header[18] - (self.timebases[header[19]] * self.hgrids/2) + i*interval*header[17]
 
             points.append((timestamp, voltage))
 
-        return points
+        return np.array(points)
