@@ -4,6 +4,7 @@ import time
 
 import matplotlib.pyplot as plt
 import numpy as np
+import csv
 from colorama import Fore, Style, init
 from tools.fitter import sine_fit
 from tools.gen import Gen
@@ -34,11 +35,12 @@ periods_visible = 5
 # number of points to sample
 sample_points = 10000
 
-# save raw points
-save_points = True
+# save variables
+save_points = False
+save_sine_fit = False
+save_nyquist = True
 
-# save fit sinusoid
-save_sine_fit = True
+nyquist_file = "nyquist.csv"
 
 # number of bops activated
 active_bops = 1
@@ -120,6 +122,11 @@ gen.set_amplitude(2, 2)
 gen.set_offset(2, 1)
 
 ##### end setup #####
+if save_nyquist:
+    with open('data/'+nyquist_file, 'w') as file:
+        file.write('resistance, theta')
+
+##### end config logging #####
 print(Fore.GREEN + f"Finished Initialization")
 
 freq_exp2_test = freq_exp2_start
@@ -175,16 +182,28 @@ def log_result():
     if save_points:
         # log current
         # log voltage
-        # (x)_time, (x)_voltage
+        # (x)_time, (x)_value(voltage really)
         pass
 
-    fit_current = sine_fit(current, freq_test)
-    fit_voltage = sine_fit(voltage, freq_test)
+    current_fit = sine_fit(current, freq_test)
+    voltage_fit = sine_fit(voltage, freq_test)
+
+    camp, cphi, coffset = current_fit
+    vamp, vphi, voffset = voltage_fit
 
     if save_sine_fit:
         # log ABCD constants
         # for current and voltage
         pass
+
+    dangle = cphi-vphi
+    resistance = vamp/camp
+
+    if save_nyquist:
+        print(f"NQ Polar: {resistance}, {dangle}")
+        with open('data/'+nyquist_file, 'a', newline='') as file:
+            writer = csv.writer(file)
+            writer.writerow([resistance, dangle])
 
 
 while freq_exp2_test <= freq_exp2_end:
