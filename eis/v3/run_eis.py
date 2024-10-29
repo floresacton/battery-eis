@@ -1,10 +1,8 @@
+import csv
 import math
 import sys
 import time
 
-import matplotlib.pyplot as plt
-import numpy as np
-import csv
 from colorama import Fore, Style, init
 from tools.fitter import sine_fit
 from tools.gen import Gen
@@ -12,20 +10,20 @@ from tools.plotter import plot
 from tools.scope import Scope
 
 # test every 2^n freq inclusive
-freq_exp2_start = 4 # 16Hz
+freq_exp2_start = 2 # 16Hz
 freq_exp2_end = 13 # 8192Hz
 freq_exp2_step = 0.2 # x2 Hz
 
 # offset in amps inclusive
-offset_start = 5
-offset_end = 5
+offset_start = 0
+offset_end = 0
 offset_step = 1
 
 # current amplitude
-current_amplitude = 5
+current_amplitude = 0.5
 
 # constant delay
-constant_delay = 0.5
+constant_delay = 0.6
 # delay by x periods
 period_delays = 20
 
@@ -46,15 +44,22 @@ nyquist_file = "nyquist.csv"
 active_bops = 1
 
 # resistances to calculate ranges
-shunt_resistance = 0.00375
-neg_wire_resistance = 0.004
-cell_resistance = 0.015 # best estimate
+neg_wire_resistance = 0.01
+shunt_resistance = 0.005
+shunt_wire_resistance = -0.004
+cell_resistance = 0.005 # cells is ~0.01
 
 # nominal testing voltage
-cell_voltage = 3.2
+# cell_voltage = 3.4
+cell_voltage = 0
 
 # (channel, probe attenuation)
-scope_config = [(1, 1), (2, 10), (3, 10), (4, 10)]
+scope_config = [(1, 1), (2, 1), (3, 1), (4, 1)]
+
+# offset impedence
+offset_file = "offset.csv"
+# load later
+offset_data = []
 
 ##### end config #####
 init(autoreset=True)
@@ -99,13 +104,13 @@ for schan in scope_config:
     scope.channel_set(schan[0], "BWL", "20M")
     scope.channel_set(schan[0], "PROB", f"VAL,{'{:.2E}'.format(schan[1])}")
 
-scope.channel_set(1, "SCAL", "1")
-scope.channel_set(2, "SCAL", f"{0.005*current_amplitude:.2E}")
-scope.channel_set(3, "SCAL", f"{0.005*current_amplitude:.2E}")
+scope.channel_set(1, "SCAL", f"{0.05*current_amplitude:.2E}")
+scope.channel_set(2, "SCAL", f"{0.05*current_amplitude:.2E}")
+scope.channel_set(3, "SCAL", f"{0.05*current_amplitude:.2E}")
 scope.channel_set(4, "SCAL", f"{0.05*current_amplitude:.2E}")
 
 # setup trigger
-scope.trigger_set_level(1)
+scope.trigger_set_level(0)
 scope.trigger_set_mode("NORM")
 
 # setup waveform/aquire
@@ -124,11 +129,18 @@ gen.set_offset(2, 1)
 ##### end setup #####
 if save_nyquist:
     with open('data/'+nyquist_file, 'w') as file:
-        file.write('resistance, theta')
+        file.write('resistance,theta\n')
+
+with open('data/offset.csv', 'r') as file:
+    csv_reader = csv.reader(file)
+    for row in csv_reader:
+        offset_data.append(row)
+
 
 ##### end config logging #####
 print(Fore.GREEN + f"Finished Initialization")
 
+test_index = 0
 freq_exp2_test = freq_exp2_start
 freq_test = math.pow(2, freq_exp2_test)
 offset_test = offset_start
@@ -159,9 +171,10 @@ def setup_offset():
     gen.set_offset(1, offset_test/active_bops)
 
     center_current = 2*offset_test
-    scope.channel_set(2, "OFFS", f"{center_current*shunt_resistance:.2E}")
-    scope.channel_set(3, "OFFS", f"{center_current*(shunt_resistance+neg_wire_resistance):.2E}")
-    scope.channel_set(4, "OFFS", f"{center_current*(shunt_resistance+neg_wire_resistance+cell_resistance)-cell_voltage:.2E}")
+    scope.channel_set(1, "OFFS", f"{center_current*(neg_wire_resistance):.2E}")
+    scope.channel_set(2, "OFFS", f"{center_current*(neg_wire_resistance+shunt_resistance):.2E}")
+    scope.channel_set(3, "OFFS", f"{center_current*(neg_wire_resistance+shunt_resistance+shunt_wire_resistance):.2E}")
+    scope.channel_set(4, "OFFS", f"{center_current*(neg_wire_resistance+shunt_resistance+shunt_wire_resistance+cell_resistance)-cell_voltage:.2E}")
 
 #### data format ####
 # inside test folder in data
@@ -170,14 +183,16 @@ def setup_offset():
 
 def log_result():
     data = []
-    for chan in [2,3,4]:
+    for chan in [1,2,3,4]:
         scope.waveform_set("SOUR", f"C{chan}")
         header = scope.waveform_preamble()
         data.append(scope.waveform_data(header, waveform_interval))
 
-    current = data[0]
-    voltage = current.copy()
-    voltage[:, 1] = data[2][:, 1] - data[1][:, 1]
+    current = data[0].copy()
+    current[:, 1] = data[1][:, 1] - data[0][:, 1]
+
+    voltage = data[2].copy()
+    voltage[:, 1] = data[3][:, 1] - data[2][:, 1]
 
     if save_points:
         # log current
@@ -231,6 +246,7 @@ while freq_exp2_test <= freq_exp2_end:
     offset_test = offset_start
     freq_exp2_test += freq_exp2_step
     freq_test = math.pow(2, freq_exp2_test)
+    test_index += 1
 
 # disable wavegen
 gen.set_enable(1, 0)
