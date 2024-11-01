@@ -3,6 +3,7 @@ import math
 import sys
 import time
 
+import numpy as np
 from colorama import Fore, Style, init
 from tools.fitter import sine_fit
 from tools.gen import Gen
@@ -10,7 +11,7 @@ from tools.plotter import plot
 from tools.scope import Scope
 
 # test every 2^n freq inclusive
-freq_exp2_start = 2 # 16Hz
+freq_exp2_start = 12 # 16Hz
 freq_exp2_end = 13 # 8192Hz
 freq_exp2_step = 0.2 # x2 Hz
 
@@ -188,11 +189,27 @@ def log_result():
         header = scope.waveform_preamble()
         data.append(scope.waveform_data(header, waveform_interval))
 
+    plot(data)
+
+    sin_data = []
+    print(freq_test)
+    for dat in data:
+        amp, phi, offset = sine_fit(dat, freq_test)
+        print(amp, phi, offset)
+        tpts = []
+        for time in dat[:, 0]:
+            tpts.append([time, offset+amp*np.cos(2*np.pi*freq_test*time+phi)])
+        sin_data.append(tpts)
+
+    plot(data+sin_data)
+
     current = data[0].copy()
     current[:, 1] = data[1][:, 1] - data[0][:, 1]
 
     voltage = data[2].copy()
     voltage[:, 1] = data[3][:, 1] - data[2][:, 1]
+
+    plot([current, voltage])
 
     if save_points:
         # log current

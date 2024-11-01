@@ -1,14 +1,23 @@
 import matplotlib.pyplot as plt
 
+colors = [
+    "b",  # blue
+    "g",  # green
+    "r",  # red
+    "c",  # cyan
+    "m",  # magenta
+    "y",  # yellow
+    "k",  # black
+    "w",  # white
+]
 
-def plot(pts1, pts2):
-    # Separate the list of tuples
-    x1, y1 = zip(*pts1)
-    x2, y2 = zip(*pts2)
 
-    # Plot each group with different styles
-    plt.plot(x1, y1, color='yellow', label='Trig', marker='', linestyle='-', linewidth=2)
-    plt.plot(x2, y2, color='magenta', label='Voltage', marker='', linestyle='--', linewidth=2)
+def plot(datasets):
+    i = 0
+    for dataset in datasets:
+        x, y = zip(*dataset)
+        plt.scatter(x, y, color=colors[i], label=str(i), s=2)
+        i+=1
 
     # Add labels and title
     plt.xlabel('Time')
