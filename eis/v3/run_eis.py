@@ -5,15 +5,16 @@ import time
 
 import numpy as np
 from colorama import Fore, Style, init
+
 from tools.fitter import sine_fit
 from tools.gen import Gen
 from tools.plotter import plot
 from tools.scope import Scope
 
 # test every 2^n freq inclusive
-freq_exp2_start = 12 # 16Hz
-freq_exp2_end = 13 # 8192Hz
-freq_exp2_step = 0.2 # x2 Hz
+freq_exp2_start = 1 # 16Hz
+freq_exp2_end = 10 # 8192Hz
+freq_exp2_step = 0.5 # x2 Hz
 
 # offset in amps inclusive
 offset_start = 0
@@ -52,7 +53,7 @@ cell_resistance = 0.005 # cells is ~0.01
 
 # nominal testing voltage
 # cell_voltage = 3.4
-cell_voltage = 0
+cell_voltage = 2.9
 
 # (channel, probe attenuation)
 scope_config = [(1, 1), (2, 1), (3, 1), (4, 1)]
@@ -184,12 +185,12 @@ def setup_offset():
 
 def log_result():
     data = []
-    for chan in [1,2,3,4]:
+    for chan in [1,3,2,4]:
         scope.waveform_set("SOUR", f"C{chan}")
         header = scope.waveform_preamble()
         data.append(scope.waveform_data(header, waveform_interval))
 
-    plot(data)
+    # plot(data)
 
     sin_data = []
     print(freq_test)
@@ -201,7 +202,7 @@ def log_result():
             tpts.append([time, offset+amp*np.cos(2*np.pi*freq_test*time+phi)])
         sin_data.append(tpts)
 
-    plot(data+sin_data)
+    # plot(data+sin_data)
 
     current = data[0].copy()
     current[:, 1] = data[1][:, 1] - data[0][:, 1]
@@ -209,7 +210,7 @@ def log_result():
     voltage = data[2].copy()
     voltage[:, 1] = data[3][:, 1] - data[2][:, 1]
 
-    plot([current, voltage])
+    # plot([current, voltage])
 
     if save_points:
         # log current
