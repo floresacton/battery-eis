@@ -12,8 +12,8 @@ from tools.plotter import plot
 from tools.scope import Scope
 
 # test every 2^n freq inclusive
-freq_exp2_start = 1 # 16Hz
-freq_exp2_end = 10 # 8192Hz
+freq_exp2_start = 0.001 # 16Hz
+freq_exp2_end = 9 # 8192Hz
 freq_exp2_step = 0.5 # x2 Hz
 
 # offset in amps inclusive
@@ -25,9 +25,9 @@ offset_step = 1
 current_amplitude = 0.5
 
 # constant delay
-constant_delay = 0.6
+constant_delay = 1
 # delay by x periods
-period_delays = 20
+period_delays = 10
 
 # visible in width
 periods_visible = 5
@@ -46,14 +46,14 @@ nyquist_file = "nyquist.csv"
 active_bops = 1
 
 # resistances to calculate ranges
-neg_wire_resistance = 0.01
+neg_wire_resistance = 0.001
 shunt_resistance = 0.005
 shunt_wire_resistance = -0.004
 cell_resistance = 0.005 # cells is ~0.01
 
 # nominal testing voltage
 # cell_voltage = 3.4
-cell_voltage = 2.9
+cell_voltage = 3.4
 
 # (channel, probe attenuation)
 scope_config = [(1, 1), (2, 1), (3, 1), (4, 1)]
