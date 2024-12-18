@@ -11,26 +11,46 @@ from tools.gen import Gen
 from tools.plotter import plot
 from tools.scope import Scope
 
-# test every 2^n freq inclusive
-freq_exp2_start = 0.001 # 16Hz
-freq_exp2_end = 9 # 8192Hz
-freq_exp2_step = 0.5 # x2 Hz
+# test ferquencies
+freq_exp2_start = np.log2(10)
+freq_exp2_end = np.log2(8000)
+freq_exp2_step = (freq_exp2_end-freq_exp2_start)/10
 
 # offset in amps inclusive
 offset_start = 0
 offset_end = 0
 offset_step = 1
 
+# nominal testing voltage
+# cell_voltage = 3.5
+cell_voltage = 0
+
 # current amplitude
-current_amplitude = 0.5
+current_amplitude = 5
+
+# visible in width
+periods_visible = 5
+
+# number of bops activated
+active_bops = 1
+
+# bop center voltage offset
+bop_offset = -0.262
+# bop amplitude output scaling
+bop_gain = 1.045
+
+# resistances to calculate ranges
+# in order from bops
+neg_wire_resistance = 0.14
+shunt_resistance = 0.00996
+shunt_wire_resistance = 0.065
+
+cell_resistance = 0.008 # cells is ~0.01
 
 # constant delay
 constant_delay = 1
 # delay by x periods
-period_delays = 10
-
-# visible in width
-periods_visible = 5
+period_delays = 15
 
 # number of points to sample
 sample_points = 10000
@@ -38,30 +58,11 @@ sample_points = 10000
 # save variables
 save_points = False
 save_sine_fit = False
-save_nyquist = True
 
 nyquist_file = "nyquist.csv"
 
-# number of bops activated
-active_bops = 1
-
-# resistances to calculate ranges
-neg_wire_resistance = 0.001
-shunt_resistance = 0.005
-shunt_wire_resistance = -0.004
-cell_resistance = 0.005 # cells is ~0.01
-
-# nominal testing voltage
-# cell_voltage = 3.4
-cell_voltage = 3.4
-
 # (channel, probe attenuation)
 scope_config = [(1, 1), (2, 1), (3, 1), (4, 1)]
-
-# offset impedence
-offset_file = "offset.csv"
-# load later
-offset_data = []
 
 ##### end config #####
 init(autoreset=True)
@@ -106,10 +107,10 @@ for schan in scope_config:
     scope.channel_set(schan[0], "BWL", "20M")
     scope.channel_set(schan[0], "PROB", f"VAL,{'{:.2E}'.format(schan[1])}")
 
-scope.channel_set(1, "SCAL", f"{0.05*current_amplitude:.2E}")
-scope.channel_set(2, "SCAL", f"{0.05*current_amplitude:.2E}")
-scope.channel_set(3, "SCAL", f"{0.05*current_amplitude:.2E}")
-scope.channel_set(4, "SCAL", f"{0.05*current_amplitude:.2E}")
+scope.channel_set(1, "SCAL", f"{0.02*current_amplitude:.2E}")
+scope.channel_set(2, "SCAL", f"{0.02*current_amplitude:.2E}")
+scope.channel_set(3, "SCAL", f"{0.02*current_amplitude:.2E}")
+scope.channel_set(4, "SCAL", f"{0.02*current_amplitude:.2E}")
 
 # setup trigger
 scope.trigger_set_level(0)
@@ -122,22 +123,14 @@ scope.waveform_set("STAR", "0")
 
 # setup gen
 gen.set_mode(1, "SINE")
-gen.set_mode(2, "SQUARE")
 # +-(amplitude)A for opamp
-gen.set_amplitude(1, current_amplitude)
-gen.set_amplitude(2, 2)
-gen.set_offset(2, 1)
+gen.set_amplitude(1, current_amplitude*bop_gain)
+gen.set_offset(1, bop_offset)
+gen.set_enable(1, 1)
 
 ##### end setup #####
-if save_nyquist:
-    with open('data/'+nyquist_file, 'w') as file:
-        file.write('resistance,theta\n')
-
-with open('data/offset.csv', 'r') as file:
-    csv_reader = csv.reader(file)
-    for row in csv_reader:
-        offset_data.append(row)
-
+with open('data/'+nyquist_file, 'w') as file:
+    file.write('freq,resistance,theta\n')
 
 ##### end config logging #####
 print(Fore.GREEN + f"Finished Initialization")
@@ -170,7 +163,7 @@ def setup_freq():
     scope.waveform_set("INT", waveform_interval)
 
 def setup_offset():
-    gen.set_offset(1, offset_test/active_bops)
+    gen.set_offset(1, bop_offset+offset_test/active_bops)
 
     center_current = 2*offset_test
     scope.channel_set(1, "OFFS", f"{center_current*(neg_wire_resistance):.2E}")
@@ -185,38 +178,17 @@ def setup_offset():
 
 def log_result():
     data = []
-    for chan in [1,3,2,4]:
+    for chan in [1,2,3,4]:
         scope.waveform_set("SOUR", f"C{chan}")
         header = scope.waveform_preamble()
         data.append(scope.waveform_data(header, waveform_interval))
 
-    # plot(data)
-
-    sin_data = []
-    print(freq_test)
-    for dat in data:
-        amp, phi, offset = sine_fit(dat, freq_test)
-        print(amp, phi, offset)
-        tpts = []
-        for time in dat[:, 0]:
-            tpts.append([time, offset+amp*np.cos(2*np.pi*freq_test*time+phi)])
-        sin_data.append(tpts)
-
-    # plot(data+sin_data)
-
+    # pretty sure the times are the same
     current = data[0].copy()
     current[:, 1] = data[1][:, 1] - data[0][:, 1]
 
     voltage = data[2].copy()
     voltage[:, 1] = data[3][:, 1] - data[2][:, 1]
-
-    # plot([current, voltage])
-
-    if save_points:
-        # log current
-        # log voltage
-        # (x)_time, (x)_value(voltage really)
-        pass
 
     current_fit = sine_fit(current, freq_test)
     voltage_fit = sine_fit(voltage, freq_test)
@@ -224,19 +196,12 @@ def log_result():
     camp, cphi, coffset = current_fit
     vamp, vphi, voffset = voltage_fit
 
-    if save_sine_fit:
-        # log ABCD constants
-        # for current and voltage
-        pass
-
     dangle = cphi-vphi
-    resistance = vamp/camp
+    resistance = (vamp/camp)*shunt_resistance
 
-    if save_nyquist:
-        print(f"NQ Polar: {resistance}, {dangle}")
-        with open('data/'+nyquist_file, 'a', newline='') as file:
-            writer = csv.writer(file)
-            writer.writerow([resistance, dangle])
+    with open('data/'+nyquist_file, 'a', newline='') as file:
+        writer = csv.writer(file)
+        writer.writerow([freq_test, resistance, dangle])
 
 
 while freq_exp2_test <= freq_exp2_end:
@@ -247,15 +212,12 @@ while freq_exp2_test <= freq_exp2_end:
         print(Fore.MAGENTA + f"Running Test: Freq - {freq_test}, Offset - {offset_test}")
 
         scope.trigger_run()
-        gen.set_enable(1, 1)
-        gen.set_enable(2, 1)
+        gen.set_offset(1, bop_offset)
 
         time.sleep(constant_delay)
         time.sleep(1/freq_test*period_delays)
 
         scope.trigger_stop()
-        gen.set_enable(1, 0)
-        gen.set_enable(2, 0)
 
         log_result()
 
@@ -267,6 +229,5 @@ while freq_exp2_test <= freq_exp2_end:
     test_index += 1
 
 # disable wavegen
-gen.set_enable(1, 0)
-gen.set_enable(2, 0)
-gen.set_enable(3, 0)
+gen.set_mode(1, "DC")
+gen.set_offset(1, bop_offset)
