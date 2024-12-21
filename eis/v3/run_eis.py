@@ -11,10 +11,13 @@ from tools.gen import Gen
 from tools.plotter import plot
 from tools.scope import Scope
 
+# test loops
+test_loops = 1
+
 # test ferquencies
-freq_exp2_start = np.log2(10)
-freq_exp2_end = np.log2(8000)
-freq_exp2_step = (freq_exp2_end-freq_exp2_start)/10
+freq_exp2_start = np.log2(0.1)
+freq_exp2_end = np.log2(300)
+freq_exp2_step = (freq_exp2_end-freq_exp2_start)/20
 
 # offset in amps inclusive
 offset_start = 0
@@ -22,11 +25,10 @@ offset_end = 0
 offset_step = 1
 
 # nominal testing voltage
-# cell_voltage = 3.5
-cell_voltage = 0
+cell_voltage = 3.71
 
 # current amplitude
-current_amplitude = 5
+current_amplitude = 2
 
 # visible in width
 periods_visible = 5
@@ -35,7 +37,7 @@ periods_visible = 5
 active_bops = 1
 
 # bop center voltage offset
-bop_offset = -0.262
+bop_offset = -0.28
 # bop amplitude output scaling
 bop_gain = 1.045
 
@@ -50,7 +52,8 @@ cell_resistance = 0.008 # cells is ~0.01
 # constant delay
 constant_delay = 1
 # delay by x periods
-period_delays = 15
+# recommend not less than 11
+period_delays = 11
 
 # number of points to sample
 sample_points = 10000
@@ -59,7 +62,7 @@ sample_points = 10000
 save_points = False
 save_sine_fit = False
 
-nyquist_file = "nyquist.csv"
+data_file = "cell1"
 
 # (channel, probe attenuation)
 scope_config = [(1, 1), (2, 1), (3, 1), (4, 1)]
@@ -95,11 +98,24 @@ for channel, attenuation in scope_config:
 gen = Gen("USB::62700::4355::SDG1XDDQ7R3310::INSTR")
 scope = Scope("USB::62700::4119::SDS08A0X804131::INSTR")
 
-# reset gen and scope
+
+# setup gen
 gen.set_enable(1, 0)
 gen.set_enable(2, 0)
 gen.set_enable(3, 0)
+
+gen.set_mode(1, "DC")
+gen.set_offset(1, bop_offset)
+gen.set_enable(1, 1)
+
+# reset scope
 scope.reset()
+
+# enable gen wave
+gen.set_enable(1, 0)
+gen.set_mode(1, "SINE")
+gen.set_amplitude(1, current_amplitude*bop_gain)
+gen.set_enable(1, 1)
 
 # setup channels
 for schan in scope_config:
@@ -109,8 +125,8 @@ for schan in scope_config:
 
 scope.channel_set(1, "SCAL", f"{0.02*current_amplitude:.2E}")
 scope.channel_set(2, "SCAL", f"{0.02*current_amplitude:.2E}")
-scope.channel_set(3, "SCAL", f"{0.02*current_amplitude:.2E}")
-scope.channel_set(4, "SCAL", f"{0.02*current_amplitude:.2E}")
+scope.channel_set(3, "SCAL", f"{0.04*current_amplitude:.2E}")
+scope.channel_set(4, "SCAL", f"{0.04*current_amplitude:.2E}")
 
 # setup trigger
 scope.trigger_set_level(0)
@@ -121,25 +137,12 @@ scope.aquire_set("MDEP", "1M")
 scope.waveform_set("WIDT", "WORD") 
 scope.waveform_set("STAR", "0")
 
-# setup gen
-gen.set_mode(1, "SINE")
-# +-(amplitude)A for opamp
-gen.set_amplitude(1, current_amplitude*bop_gain)
-gen.set_offset(1, bop_offset)
-gen.set_enable(1, 1)
-
 ##### end setup #####
-with open('data/'+nyquist_file, 'w') as file:
-    file.write('freq,resistance,theta\n')
+waveform_interval = 0
 
-##### end config logging #####
-print(Fore.GREEN + f"Finished Initialization")
-
-test_index = 0
 freq_exp2_test = freq_exp2_start
 freq_test = math.pow(2, freq_exp2_test)
 offset_test = offset_start
-waveform_interval = 0
 
 def setup_freq():
     # set scope horizontal scale for "periods_visible" waveforms
@@ -171,12 +174,8 @@ def setup_offset():
     scope.channel_set(3, "OFFS", f"{center_current*(neg_wire_resistance+shunt_resistance+shunt_wire_resistance):.2E}")
     scope.channel_set(4, "OFFS", f"{center_current*(neg_wire_resistance+shunt_resistance+shunt_wire_resistance+cell_resistance)-cell_voltage:.2E}")
 
-#### data format ####
-# inside test folder in data
-# test.info -> contains info on test
-# test_freqID_offset_ID.csv -> contains raw test data
-
-def log_result():
+#### data output ####
+def log_result(loop_idx):
     data = []
     for chan in [1,2,3,4]:
         scope.waveform_set("SOUR", f"C{chan}")
@@ -196,37 +195,48 @@ def log_result():
     camp, cphi, coffset = current_fit
     vamp, vphi, voffset = voltage_fit
 
-    dangle = cphi-vphi
-    resistance = (vamp/camp)*shunt_resistance
+    dangle = vphi-cphi
+    
+    #1/cur = shunt_resistance
+    impedence = vamp*(shunt_resistance/camp)
 
-    with open('data/'+nyquist_file, 'a', newline='') as file:
+    with open('data/' + data_file + "_" + str(loop_idx) + ".csv", 'a', newline='') as file:
         writer = csv.writer(file)
-        writer.writerow([freq_test, resistance, dangle])
+        writer.writerow([freq_test, offset_test, impedence, dangle])
 
-
-while freq_exp2_test <= freq_exp2_end:
-    setup_freq()
-
-    while offset_test <= offset_end:
-        setup_offset()
-        print(Fore.MAGENTA + f"Running Test: Freq - {freq_test}, Offset - {offset_test}")
-
-        scope.trigger_run()
-        gen.set_offset(1, bop_offset)
-
-        time.sleep(constant_delay)
-        time.sleep(1/freq_test*period_delays)
-
-        scope.trigger_stop()
-
-        log_result()
-
-        offset_test += offset_step
-
-    offset_test = offset_start
-    freq_exp2_test += freq_exp2_step
+for loop_idx in range(test_loops):
+    print(Fore.GREEN + f"Beginning Test {loop_idx}")
+    freq_exp2_test = freq_exp2_start
     freq_test = math.pow(2, freq_exp2_test)
-    test_index += 1
+    offset_test = offset_start
+
+    with open('data/' + data_file + "_" + str(loop_idx) + ".csv", 'w') as file:
+        file.write('freq,offset,resistance,theta\n')
+
+    while freq_exp2_test <= freq_exp2_end:
+        setup_freq()
+
+        while offset_test <= offset_end:
+            setup_offset()
+            print(Fore.MAGENTA + f"Running Test: Freq - {freq_test}, Offset - {offset_test}")
+
+            scope.trigger_run()
+            gen.set_offset(1, bop_offset)
+
+            time.sleep(constant_delay)
+            time.sleep(1/freq_test*period_delays)
+
+            scope.trigger_stop()
+
+            log_result(loop_idx)
+
+            offset_test += offset_step
+
+        offset_test = offset_start
+        freq_exp2_test += freq_exp2_step
+        freq_test = math.pow(2, freq_exp2_test)
+    
+    time.sleep(1)
 
 # disable wavegen
 gen.set_mode(1, "DC")

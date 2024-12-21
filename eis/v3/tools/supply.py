@@ -10,10 +10,10 @@ class Supply():
         self.supply.write(f"OUTP CH{chan},{'ON' if state else 'OFF'}")
     
     def set_voltage(self, chan, voltage):
-        self.supply.write(f"CH{chan}:VOLT {voltage:.6}")
+        self.supply.write(f"CH{chan}:VOLT {float(voltage):.6}")
     
     def set_current(self, chan, current):
-        self.supply.write(f"CH{chan}:CURR {current:.6}")
+        self.supply.write(f"CH{chan}:CURR {float(current):.6}")
 
     def get_voltage(self, chan):
         # return setpoint
@@ -24,10 +24,10 @@ class Supply():
         return self.supply.ask(f"CH{chan}:CURR?")
     
     def measure_voltage(self, chan):
-        return self.supply.ask(f"MEAS:VOLT? CH{chan}")
+        return float(self.supply.ask(f"MEAS:VOLT? CH{chan}"))
 
     def measure_current(self, chan):
-        return self.supply.ask(f"MEAS:CURR? CH{chan}")
+        return float(self.supply.ask(f"MEAS:CURR? CH{chan}"))
 
     def measure_power(self, chan):
-        return self.supply.ask(f"MEAS:POWE? CH{chan}")
+        return float(self.supply.ask(f"MEAS:POWE? CH{chan}"))
