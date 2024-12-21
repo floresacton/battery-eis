@@ -19,9 +19,11 @@ freq_exp2_start = np.log2(0.1)
 freq_exp2_end = np.log2(300)
 freq_exp2_step = (freq_exp2_end-freq_exp2_start)/20
 
-# offset in amps inclusive
-offset_start = 0
-offset_end = 0
+# offset in amps inclusive (bop meter)
+# + means charging cell
+# - means loading cell
+offset_start = 2
+offset_end = 2
 offset_step = 1
 
 # nominal testing voltage
@@ -39,15 +41,16 @@ active_bops = 1
 # bop center voltage offset
 bop_offset = -0.28
 # bop amplitude output scaling
-bop_gain = 1.045
+bop_gain = 1.045 # plus gain
+
 
 # resistances to calculate ranges
 # in order from bops
-neg_wire_resistance = 0.14
+neg_wire_resistance = 0.017
 shunt_resistance = 0.00996
-shunt_wire_resistance = 0.065
+shunt_wire_resistance = 0.012
 
-cell_resistance = 0.008 # cells is ~0.01
+cell_resistance = 0.015 # rough approx for scaling
 
 # constant delay
 constant_delay = 1
@@ -62,7 +65,7 @@ sample_points = 10000
 save_points = False
 save_sine_fit = False
 
-data_file = "cell1"
+data_file = "cellp2"
 
 # (channel, probe attenuation)
 scope_config = [(1, 1), (2, 1), (3, 1), (4, 1)]
@@ -105,7 +108,7 @@ gen.set_enable(2, 0)
 gen.set_enable(3, 0)
 
 gen.set_mode(1, "DC")
-gen.set_offset(1, bop_offset)
+gen.set_offset(1, bop_offset-offset_start/2/active_bops)
 gen.set_enable(1, 1)
 
 # reset scope
@@ -114,8 +117,12 @@ scope.reset()
 # enable gen wave
 gen.set_enable(1, 0)
 gen.set_mode(1, "SINE")
+gen.set_offset(1, bop_offset-offset_start/2/active_bops)
 gen.set_amplitude(1, current_amplitude*bop_gain)
 gen.set_enable(1, 1)
+
+# if biasing offset for 2 min before
+time.sleep(60)
 
 # setup channels
 for schan in scope_config:
@@ -126,10 +133,9 @@ for schan in scope_config:
 scope.channel_set(1, "SCAL", f"{0.02*current_amplitude:.2E}")
 scope.channel_set(2, "SCAL", f"{0.02*current_amplitude:.2E}")
 scope.channel_set(3, "SCAL", f"{0.04*current_amplitude:.2E}")
-scope.channel_set(4, "SCAL", f"{0.04*current_amplitude:.2E}")
+scope.channel_set(4, "SCAL", f"{0.08*current_amplitude:.2E}")
 
 # setup trigger
-scope.trigger_set_level(0)
 scope.trigger_set_mode("NORM")
 
 # setup waveform/aquire
@@ -166,13 +172,13 @@ def setup_freq():
     scope.waveform_set("INT", waveform_interval)
 
 def setup_offset():
-    gen.set_offset(1, bop_offset+offset_test/active_bops)
+    gen.set_offset(1, bop_offset-offset_test/2/active_bops)
+    scope.trigger_set_level(offset_test*(neg_wire_resistance))
 
-    center_current = 2*offset_test
-    scope.channel_set(1, "OFFS", f"{center_current*(neg_wire_resistance):.2E}")
-    scope.channel_set(2, "OFFS", f"{center_current*(neg_wire_resistance+shunt_resistance):.2E}")
-    scope.channel_set(3, "OFFS", f"{center_current*(neg_wire_resistance+shunt_resistance+shunt_wire_resistance):.2E}")
-    scope.channel_set(4, "OFFS", f"{center_current*(neg_wire_resistance+shunt_resistance+shunt_wire_resistance+cell_resistance)-cell_voltage:.2E}")
+    scope.channel_set(1, "OFFS", f"{-offset_test*(neg_wire_resistance):.2E}")
+    scope.channel_set(2, "OFFS", f"{-offset_test*(neg_wire_resistance+shunt_resistance):.2E}")
+    scope.channel_set(3, "OFFS", f"{-offset_test*(neg_wire_resistance+shunt_resistance+shunt_wire_resistance):.2E}")
+    scope.channel_set(4, "OFFS", f"{-offset_test*(neg_wire_resistance+shunt_resistance+shunt_wire_resistance+cell_resistance)-cell_voltage:.2E}")
 
 #### data output ####
 def log_result(loop_idx):
@@ -218,10 +224,10 @@ for loop_idx in range(test_loops):
 
         while offset_test <= offset_end:
             setup_offset()
+
             print(Fore.MAGENTA + f"Running Test: Freq - {freq_test}, Offset - {offset_test}")
 
             scope.trigger_run()
-            gen.set_offset(1, bop_offset)
 
             time.sleep(constant_delay)
             time.sleep(1/freq_test*period_delays)

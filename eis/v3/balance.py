@@ -20,7 +20,7 @@ charge_current = 3
 
 # nominal 3.71V - 3.72V
 discharge_voltage = 3.52
-charge_voltage = 3.81
+charge_voltage = 3.8
 
 # discharge below thresh
 load.set_mode("CURR")
