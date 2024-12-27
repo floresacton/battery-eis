@@ -47,7 +47,7 @@ resistance = data["resistance"].values
 theta = data["theta"].values
 
 # Convert resistance and theta to complex impedance
-z_data = resistance * np.exp(-1j * theta)
+z_data = resistance * np.exp(1j * theta)
 
 # Fit the model
 fitted_model = fit_nyquist(frequencies, z_data, time_constants)
