@@ -4,7 +4,7 @@ import pandas as pd
 
 for x in range(5):
     # Read the CSV file
-    data = pd.read_csv('data/cell2_'+str(x)+'.csv')
+    data = pd.read_csv('data/resistor_'+str(x)+'.csv')
     print(data.columns)
 
     # Extract resistance and theta columns
@@ -22,3 +22,4 @@ for x in range(5):
     ax.set_ylabel('Resistance')
 
     plt.show()
+

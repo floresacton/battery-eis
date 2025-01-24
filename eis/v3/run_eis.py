@@ -5,7 +5,6 @@ import time
 
 import numpy as np
 from colorama import Fore, Style, init
-
 from tools.fitter import sine_fit
 from tools.gen import Gen
 from tools.plotter import plot
@@ -22,12 +21,13 @@ freq_exp2_step = (freq_exp2_end-freq_exp2_start)/20
 # offset in amps inclusive (bop meter)
 # + means charging cell
 # - means loading cell
-offset_start = 2
-offset_end = 2
+offset_start = 0
+offset_end = 0
 offset_step = 1
 
 # nominal testing voltage
-cell_voltage = 3.71
+# cell_voltage = 3.71
+cell_voltage = 0
 
 # current amplitude
 current_amplitude = 2
@@ -50,7 +50,9 @@ neg_wire_resistance = 0.017
 shunt_resistance = 0.00996
 shunt_wire_resistance = 0.012
 
-cell_resistance = 0.015 # rough approx for scaling
+# rough approx for scaling
+# cell_resistance = 0.015
+cell_resistance = 0.01
 
 # constant delay
 constant_delay = 1
@@ -65,7 +67,7 @@ sample_points = 10000
 save_points = False
 save_sine_fit = False
 
-data_file = "cellp2"
+data_file = "shunt"
 
 # (channel, probe attenuation)
 scope_config = [(1, 1), (2, 1), (3, 1), (4, 1)]
@@ -122,7 +124,7 @@ gen.set_amplitude(1, current_amplitude*bop_gain)
 gen.set_enable(1, 1)
 
 # if biasing offset for 2 min before
-time.sleep(60)
+# time.sleep(60)
 
 # setup channels
 for schan in scope_config:
