@@ -40,33 +40,64 @@ def fit_nyquist(frequencies, z_data, time_constants):
     else:
         raise ValueError("Optimization failed: " + result.message)
 
-# Read data from CSV file
-data = pd.read_csv("data/cell0_0.csv")
-frequencies = data["freq"].values
-resistance = data["resistance"].values
-theta = data["theta"].values
+# data = pd.read_csv("data/cell0_1.csv")
+# frequencies = data["freq"].values
+# resistance = data["resistance"].values
+# theta = data["theta"].values
+
+# Read data from CSV files
+frequencies = np.array([])
+resistance = np.array([])
+theta = np.array([])
+
+test_frequencies = np.array([])
+
+for i in range(5):  # Loop over cells
+    for j in range(5):  # Loop over tests
+        # Read the CSV file
+        data = pd.read_csv(f'data/cell{i}_{j}.csv')
+
+        test_frequencies = data["freq"].values
+
+        frequencies = np.concatenate((frequencies, data["freq"].values))
+        resistance = np.concatenate((resistance, data["resistance"].values))
+        theta = np.concatenate((theta, data["theta"].values))
 
 # Convert resistance and theta to complex impedance
 z_data = resistance * np.exp(1j * theta)
 
 # Fit the model
 fitted_model = fit_nyquist(frequencies, z_data, time_constants)
-print("Fitted Model Parameters:", fitted_model)
+# print("Fitted Model Parameters:", fitted_model)
+print("Fitted Model Parameters:")
+print("R =", fitted_model[0])
+for i in range(time_constants):
+    print(f"R{i+1} =", fitted_model[1 + 2*i])
+    print(f"C{i+1} =", fitted_model[1 + 2*i+1])
 
 # Calculate fitted impedance
-z_fitted = np.array([calculate_impedance(fitted_model, w) for w in frequencies])
+z_fitted = np.array([calculate_impedance(fitted_model, w) for w in test_frequencies])
 
-print("Time constants")
+print("Time constants:")
 for i in range(1, len(fitted_model), 2):
-    print(fitted_model[i]*fitted_model[i+1])
+    print(f"T{i//2+1} =", fitted_model[i]*fitted_model[i+1])
+
+Rtot = fitted_model[0]
+for i in range(time_constants):
+    Rtot += fitted_model[1 + 2*i]
+print("DC resistance =", Rtot)
 
 # Plot the results
-plt.figure(figsize=(8, 8))
-plt.plot(z_data.real, -z_data.imag, 'o', color='blue', label='Data')
-plt.plot(z_fitted.real, -z_fitted.imag, 'o-', color='orange', label='Fitted')
-plt.xlabel('Real(Z)')
-plt.ylabel('-Imag(Z)')
-plt.title('Nyquist Plot')
-plt.legend()
+plt.figure(figsize=(10, 8))
+
+plt.axis('equal')  # Ensure equal scaling for x and y axes
+
+plt.plot(z_data.real, -z_data.imag, 'o', color='blue', label='EIS Data')
+plt.plot(z_fitted.real, -z_fitted.imag, 'o-', color='orange', label='Fitted Model')
+plt.xlabel('Re(Z), (Ohms)', fontsize=16, labelpad=0)
+plt.ylabel('Im(Z), (Ohms)', fontsize=16, labelpad=10)
+schr = ('s' if time_constants > 1 else '')
+plt.title(f'Nyquist Plot, ERM with {time_constants} RC circuit{schr}', fontsize=20)
+plt.legend(fontsize=14, title_fontsize=16)
 plt.grid()
 plt.show()
